@@ -1,0 +1,56 @@
+# ARCHITECTURE
+
+## Vue d'ensemble
+
+Application monolithique modulaire Next.js (App Router) avec PostgreSQL.
+Séparation stricte entre interface, logique métier, accès données et
+validation. Déployée en un seul conteneur applicatif + un service
+PostgreSQL (Docker/Coolify).
+
+```
+Navigateur (enfant / parent)
+        │  HTTPS
+        ▼
+Next.js 16 (App Router, Node 22, standalone)
+├── app/            pages + routes API (contrôles minces)
+├── features/       logique métier pure et testable
+├── lib/            client Prisma, validation Zod, sécurité, auth (Phase 2)
+└── components/     composants UI (child/parent/game/rewards/ui)
+        │  adapter @prisma/adapter-pg
+        ▼
+PostgreSQL 18 (service séparé, volume persistant, jamais exposé sur Internet)
+```
+
+## Règles d'organisation
+
+- **`features/`** : logique métier pure (moteur de multiplication, calcul de
+  scores, répétition espacée…). Aucune dépendance à React ni à la base :
+  testable unitairement.
+- **`lib/`** : infrastructure. `lib/database/client.ts` expose le singleton
+  Prisma (adapter pg). `lib/validation/schemas.ts` centralise Zod.
+- **`app/`** : routes de pages et d'API. Les routes API valident les entrées
+  avec Zod, délèguent à `features/`, puis écrivent en base.
+- Les règles métier sensibles (scores, récompenses, déblocages) sont
+  centralisées **côté serveur** (Phase 3) ; le navigateur ne fait qu'afficher.
+
+## Décisions structurantes
+
+- Next.js 16 + Turbopack (défaut du scaffold), TypeScript strict.
+- Prisma ORM **7** (dernière stable ; `latest` v8 est une release candidate).
+- `output: standalone` pour une image Docker minimale.
+- `cacheComponents` désactivé pour l'instant (application quasi
+  entièrement personnalisée par profil) — voir [DECISIONS.md](DECISIONS.md).
+
+## Environments
+
+| Environnement | Rôle | Base de données |
+|---|---|---|
+| Development | Machine locale | PostgreSQL via `docker compose up -d db` (port hôte 5434) |
+| Staging (futur Coolify) | Tests réels | PostgreSQL conteneurisé dans le projet Coolify |
+| Production | Future | Coolify + PostgreSQL conteneurisé, volume persistant, sauvegardes |
+
+## Liens
+
+- Schéma et conventions base : [DATABASE.md](DATABASE.md)
+- Sécurité : [SECURITY.md](SECURITY.md)
+- Déploiement : [DEPLOYMENT.md](DEPLOYMENT.md)

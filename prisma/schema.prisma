@@ -1,0 +1,88 @@
+// Royaume Magique des Multiplications — Schéma Prisma (PostgreSQL)
+// Convention de nommage :
+//  - Modèles Prisma : PascalCase
+//  - Tables PostgreSQL : snake_case via @@map
+//  - Colonnes : camelCase (non mappées), documenté dans docs/DATABASE.md
+// Les migrations sont versionnées dans prisma/migrations (jamais modifiées après application).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/database/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Compte parent (responsable légal). Un parent gère un ou plusieurs profils enfants.
+model User {
+  id           String    @id @default(uuid())
+  email        String    @unique
+  /// Hachage bcrypt (jamais de mot de passe en clair).
+  passwordHash String
+  displayName  String?
+  role         String    @default("parent")
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  children     ChildProfile[]
+
+  @@index([email])
+  @@map("users")
+}
+
+/// Avatar de profil enfant. Données de référence seedées (prisma/seed.ts, Phase 2).
+model Avatar {
+  id        String   @id
+  name      String
+  /// Chemin ou clé d'illustration dans /public/avatars.
+  imageKey  String
+  rarity    String   @default("common")
+  createdAt DateTime @default(now())
+  profiles  ChildProfile[]
+
+  @@map("avatars")
+}
+
+/// Profil enfant. Aucune donnée personnelle inutile : pseudonyme uniquement.
+model ChildProfile {
+  id          String       @id @default(uuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pseudonym   String
+  avatarId    String?
+  avatar      Avatar?      @relation(fields: [avatarId], references: [id])
+  level       Int          @default(1)
+  totalStars  Int          @default(0)
+  /// Objectif quotidien en questions réussies.
+  dailyGoal   Int          @default(20)
+  /// Suppression logique (confirmation parentale côté application).
+  deletedAt   DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  settings    GameSettings?
+
+  @@index([userId])
+  @@map("child_profiles")
+}
+
+/// Paramètres de jeu par profil enfant, modifiables uniquement depuis l'espace parent.
+model GameSettings {
+  id                 String  @id @default(uuid())
+  childProfileId     String  @unique
+  childProfile       ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  soundEnabled       Boolean @default(true)
+  musicEnabled       Boolean @default(true)
+  animationsEnabled  Boolean @default(true)
+  timerEnabled       Boolean @default(false)
+  /// Difficulté : EASY | NORMAL | HARD
+  difficulty         String  @default("NORMAL")
+  /// Tables de multiplication accessibles (1..10).
+  accessibleTables   Int[]   @default([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  /// Durée conseillée d'une session, en minutes (0 = illimité).
+  advisedSessionMin  Int     @default(20)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@map("game_settings")
+}

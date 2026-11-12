@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+/*
+ * Royaume Magique des Multiplications — design system (Phase 1 : tokens).
+ * Univers : magique, chaleureux, premium. Pas de couleurs agressives.
+ * Accessibilité : contrastes >= 4.5:1 sur les fonds principaux.
+ */
+
+:root {
+  /* Ciel du royaume (jour) — violet doux profond, jamais criard */
+  --background: #2d2a55;
+  --background-soft: #3b3670;
+  /* Textes sur fond sombre : contraste élevé */
+  --foreground: #fdf8ef;
+  --foreground-soft: #e8e2f5;
+
+  /* Couleurs du royaume */
+  --royal-star: #ffd166; /* étoiles magiques, or doux */
+  --royal-magic: #a78bfa; /* violet magique */
+  --royal-fairy: #7dd3fc; /* bleu fée */
+  --royal-dragon: #86efac; /* vert dragon sympathique */
+  --royal-unicorn: #f9a8d4; /* rose licorne */
+  --royal-success: #4ade80;
+  --royal-error: #f87171;
+
+  /* Cartes : blanc chaud pour la lisibilité enfant */
+  --card: #fffaf2;
+  --card-foreground: #2d2a55;
+
+  /* Boutons */
+  --button-primary: #f59e0b;
+  --button-primary-hover: #fbbf24;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-soft: var(--background-soft);
+  --color-foreground: var(--foreground);
+  --color-foreground-soft: var(--foreground-soft);
+  --color-star: var(--royal-star);
+  --color-magic: var(--royal-magic);
+  --color-fairy: var(--royal-fairy);
+  --color-dragon: var(--royal-dragon);
+  --color-unicorn: var(--royal-unicorn);
+  --color-success: var(--royal-success);
+  --color-error: var(--royal-error);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --font-display: var(--font-fredoka);
+  --font-sans: var(--font-nunito);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-nunito), system-ui, sans-serif;
+  /* Taille de base confortable pour enfants (7-8 ans) */
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-fredoka), system-ui, sans-serif;
+}
+
+/* Boutons larges, adaptés au tactile (>= 48px de hauteur). */
+.btn-large {
+  min-height: 3.25rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  font-size: 1.125rem;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-large:active {
+  transform: scale(0.97);
+}
+
+/* Focus clavier toujours visible (accessibilité). */
+:focus-visible {
+  outline: 3px solid var(--royal-star);
+  outline-offset: 2px;
+}
+
+/* Respect de la réduction d'animations (accessibilité). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
