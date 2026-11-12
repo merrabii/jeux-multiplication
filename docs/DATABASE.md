@@ -22,7 +22,14 @@ PostgreSQL est la source de vérité de toutes les données persistantes.
   (`prisma/migrations`), jamais modifiée après application.
 - Migrations de production **non destructives par défaut**.
 
-## Modèles (Phase 1 — migration `20261112142545_init_foundation`)
+## Modèles (Phase 1 + 2.1)
+
+Migration `20261112142545_init_foundation` : `users`, `child_profiles`,
+`avatars`, `game_settings`.
+
+Migration `20261112172058_add_auth_foundation` : `sessions`,
+`login_attempts`, colonnes de consentement sur `users`, index unique
+`LOWER(email)`.
 
 ### users
 Compte parent (responsable légal).
@@ -30,11 +37,36 @@ Compte parent (responsable légal).
 | Colonne | Type | Notes |
 |---|---|---|
 | id | TEXT (uuid) | PK |
-| email | TEXT | UNIQUE, index |
-| passwordHash | TEXT | bcrypt, jamais de mot de passe en clair |
+| email | TEXT | UNIQUE + index unique `LOWER(email)` (anti-contournement par casse) |
+| passwordHash | TEXT | bcrypt coût 12 (configurable), jamais de mot de passe en clair |
 | displayName | TEXT nullable | |
 | role | TEXT | défaut `parent` |
+| termsAcceptedAt | TIMESTAMP nullable | trace du consentement aux conditions |
+| termsVersion | TEXT nullable | version des conditions acceptées |
 | createdAt / updatedAt | TIMESTAMP(3) | |
+
+### sessions
+Session de connexion parent. **Source de vérité de la révocation.**
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK, référencé par le JWT (`jti`) |
+| userId | TEXT | FK → users, ON DELETE CASCADE, index |
+| expiresAt | TIMESTAMP(3) | aligné sur l'expiration du JWT (défaut 72 h) |
+| revokedAt | TIMESTAMP nullable | déconnexion : rend le JWT inutilisable |
+| createdAt | TIMESTAMP(3) | |
+
+### login_attempts
+Tentatives de connexion (limitation persistante, pas en mémoire).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| userId | TEXT nullable | FK → users, ON DELETE SET NULL |
+| email | TEXT | **normalisé minuscules** — comptage insensible à la casse |
+| success | BOOLEAN | |
+| ipAddress | TEXT nullable | donnée technique de sécurité, purgée (24 h) |
+| attemptedAt | TIMESTAMP(3) | défaut now(), index (email, attemptedAt) et (attemptedAt) |
 
 ### child_profiles
 Profil enfant. Minimisation des données : pseudonyme uniquement.
@@ -76,6 +108,8 @@ parent** (Phase 4).
 
 ```
 users 1 ──< child_profiles (cascade)
+users 1 ──< sessions (cascade)
+users 1 ──< login_attempts (SetNull)
 child_profiles 1 ──1 game_settings (cascade)
 avatars 1 ──< child_profiles (nullable, pas de cascade)
 ```
@@ -97,6 +131,7 @@ npm run db:deploy    # prisma migrate deploy (staging/production)
 npm run db:status    # état des migrations
 npm run db:generate  # régénère le client (output lib/database/generated)
 npm run db:check     # vérification transactionnelle + cascade de bout en bout
+npm run db:test:setup # crée la base de test isolée + applique les migrations
 ```
 
 Prisma 7 : le CLI ne charge plus `.env` automatiquement — la variable est

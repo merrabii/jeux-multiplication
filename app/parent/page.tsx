@@ -1,28 +1,62 @@
 import Link from "next/link";
+import type { Metadata } from "next";
+import { logoutParentAction } from "@/app/parent/auth-actions";
+import { requireParentSession } from "@/lib/auth/guards";
+
+export const metadata: Metadata = {
+  title: "Espace parent — Royaume Magique des Multiplications",
+};
 
 /**
- * Espace parent — Phase 1 : page d'attente.
- * Phase 2 : authentification sécurisée, gestion des profils enfants,
- * suivi pédagogique et paramètres.
+ * Tableau de bord parent — Phase 2.1 : session authentifiée vérifiée
+ * côté serveur (requireParentSession redirige vers /parent/connexion
+ * si la session est absente, expirée ou révoquée).
  */
-export default function ParentSpacePage() {
+export default async function ParentSpacePage() {
+  const { user } = await requireParentSession();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <span aria-hidden className="text-6xl">🔐</span>
-      <h1 className="font-display mt-6 text-3xl font-bold sm:text-4xl">
-        Espace parent en préparation
-      </h1>
-      <p className="mt-4 max-w-md text-lg text-foreground-soft">
-        Cet espace sera protégé par une authentification sécurisée et vous
-        permettra de suivre la progression de votre enfant et de gérer ses
-        profils.
-      </p>
-      <Link
-        href="/"
-        className="btn-large mt-8 border-2 border-magic text-foreground hover:bg-background-soft"
-      >
-        ← Retour à l&apos;accueil
-      </Link>
+    <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12">
+      <header className="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <p className="font-display text-sm text-star">
+            Royaume Magique des Multiplications
+          </p>
+          <h1 className="font-display mt-1 text-3xl font-bold sm:text-4xl">
+            Espace parent
+          </h1>
+        </div>
+        <form action={logoutParentAction}>
+          <button
+            type="submit"
+            className="btn-large border-2 border-magic bg-transparent text-foreground hover:bg-background-soft"
+          >
+            Se déconnecter
+          </button>
+        </form>
+      </header>
+
+      <section className="mt-10 rounded-2xl bg-card p-6 text-card-foreground shadow-lg sm:p-8">
+        <h2 className="font-display text-xl font-bold">Compte connecté</h2>
+        <p className="mt-3">
+          Bienvenue{user.displayName ? `, ${user.displayName}` : ""} ! Votre
+          session est active.
+        </p>
+        <p className="mt-2 text-sm text-card-foreground/80">
+          E-mail du compte : <strong>{user.email}</strong>
+        </p>
+      </section>
+
+      <section className="mt-6 rounded-2xl border-2 border-magic/30 p-6 sm:p-8">
+        <h2 className="font-display text-xl font-bold">Prochaines étapes</h2>
+        <p className="mt-3 text-foreground-soft">
+          La gestion des profils enfants (création, avatars, suivi
+          pédagogique) arrive à l&apos;étape suivante du chantier.
+        </p>
+        <Link href="/" className="btn-large mt-6 inline-block bg-card text-card-foreground hover:bg-white">
+          ← Retour à l&apos;accueil
+        </Link>
+      </section>
     </main>
   );
 }

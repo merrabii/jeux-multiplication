@@ -12,14 +12,40 @@ Navigateur (enfant / parent)
         │  HTTPS
         ▼
 Next.js 16 (App Router, Node 22, standalone)
-├── app/            pages + routes API (contrôles minces)
+├── app/            pages + Server Actions d'auth (contrôles minces)
 ├── features/       logique métier pure et testable
-├── lib/            client Prisma, validation Zod, sécurité, auth (Phase 2)
-└── components/     composants UI (child/parent/game/rewards/ui)
+│   ├── multiplication/   moteur de questions
+│   └── auth/             inscription/connexion + limitation de tentatives
+├── lib/            client Prisma, sessions, validation Zod, sécurité, guards
+└── components/     composants UI (parent/auth, puis child/game/rewards/ui)
         │  adapter @prisma/adapter-pg
         ▼
 PostgreSQL 18 (service séparé, volume persistant, jamais exposé sur Internet)
 ```
+
+## Flux d'authentification parent (Phase 2.1)
+
+```
+/parent/inscription  ─┐
+/parent/connexion     ├─ Server Action (CSRF Origin vérifié par Next)
+                      │        │
+                      │        ▼
+                      │  features/auth/service.ts   (Zod, bcrypt, anti-énumération)
+                      │  features/auth/rate-limit.ts (limitation persistée PostgreSQL)
+                      │        │
+                      │        ▼
+                      │  lib/database/session.ts → INSERT sessions + JWT HS256 (jose)
+                      │        │
+                      ▼        ▼
+                 Cookie httpOnly rmm_session
+                      │
+/parent  ◄─ requireParentSession() : JWT vérifié (signature+expiration)
+             PUIS session vérifiée en base (non révoquée, non expirée)
+             sinon → 307 /parent/connexion
+```
+
+La table `sessions` est la source de vérité de la révocation : la
+déconnexion écrit `revokedAt`, ce qui rend tout jeton copié inutilisable.
 
 ## Règles d'organisation
 

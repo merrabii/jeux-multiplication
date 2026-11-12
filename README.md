@@ -22,11 +22,24 @@ npm run dev                 # http://localhost:3000
 Vérifications :
 
 ```bash
-npm test                    # tests unitaires Vitest
-npm run db:check            # vérifie la persistance PostgreSQL de bout en bout
-npm run build               # build de production
-npm run start               # démarre le serveur standalone (.next/standalone)
+npm run db:test:setup      # provisionne la base de test isolée (1re fois)
+npm test                   # tests unitaires + intégration (48 tests)
+npm run db:check           # vérifie la persistance PostgreSQL de bout en bout
+npm run build              # build de production
+npm run start              # démarre le serveur standalone (.next/standalone)
 ```
+
+## Authentification parent (Phase 2.1)
+
+- **Inscription** : `/parent/inscription` (e-mail + mot de passe + conditions).
+- **Connexion** : `/parent/connexion`.
+- **Espace parent** : `/parent` — protégé côté serveur (session vérifiée
+  en PostgreSQL à chaque requête).
+- **Sécurité** : bcrypt, JWT HS256 signé (`AUTH_SECRET`), sessions
+  révocables en base (la déconnexion invalide réellement le jeton),
+  limitation des tentatives persistée en PostgreSQL.
+- Variables requises : `DATABASE_URL`, `AUTH_SECRET` (voir
+  `.env.example` et `docs/ENVIRONMENT.md`).
 
 ## Stack
 

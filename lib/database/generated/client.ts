@@ -47,6 +47,20 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model Session
+ * Session de connexion parent. Source de vérité de la révocation :
+ * un JWT valide est rejeté si la session correspondante est révoquée
+ * ou expirée en base (voir docs/SECURITY.md).
+ */
+export type Session = Prisma.SessionModel
+/**
+ * Model LoginAttempt
+ * Tentatives de connexion (persistées, pas en mémoire : la limitation
+ * survit aux redémarrages et protège par adresse e-mail normalisée
+ * en minuscules — contournement par changement de casse impossible).
+ */
+export type LoginAttempt = Prisma.LoginAttemptModel
+/**
  * Model Avatar
  * Avatar de profil enfant. Données de référence seedées (prisma/seed.ts, Phase 2).
  */

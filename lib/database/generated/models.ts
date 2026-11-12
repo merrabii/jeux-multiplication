@@ -9,6 +9,8 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User'
+export type * from './models/Session'
+export type * from './models/LoginAttempt'
 export type * from './models/Avatar'
 export type * from './models/ChildProfile'
 export type * from './models/GameSettings'

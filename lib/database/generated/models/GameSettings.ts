@@ -532,10 +532,6 @@ export type GameSettingsCreateaccessibleTablesInput = {
   set: number[]
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type GameSettingsUpdateaccessibleTablesInput = {
   set?: number[]
   push?: number | number[]

@@ -46,6 +46,8 @@
   --color-error: var(--royal-error);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-button: var(--button-primary);
+  --color-button-hover: var(--button-primary-hover);
   --font-display: var(--font-fredoka);
   --font-sans: var(--font-nunito);
 }

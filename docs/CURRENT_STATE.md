@@ -1,6 +1,6 @@
 # CURRENT STATE
 
-- **Version** : 0.1.0 (Phase 1 — Fondations techniques)
+- **Version** : 0.2.0-phase2.1 (Phase 2.1 — Authentification parent terminée)
 - **Dernière mise à jour** : 2026-11-12
 
 ## Architecture actuelle
@@ -42,14 +42,14 @@
 
 | Élément | État |
 |---|---|
-| Frontend | Squelette + accueil magique, pages d'attente |
-| Backend | `/api/health` uniquement |
-| PostgreSQL | 18.6 opérationnel (Docker local), 1 migration appliquée, 0 donnée réelle |
-| Dernière migration | `20261112142545_init_foundation` |
-| Tests | 18/18 Vitest passés ; `db:check` OK ; E2E non installés |
+| Frontend | Accueil + pages auth parent (connexion/inscription) + dashboard parent protégé |
+| Backend | `/api/health` + authentification parent complète (inscription, connexion, déconnexion, sessions révocables, limitation des tentatives) |
+| PostgreSQL | 18.6 opérationnel (Docker local), 2 migrations appliquées, 0 donnée réelle ; base de test isolée `jeux_multiplication_test` |
+| Dernière migration | `20261112172058_add_auth_foundation` (sessions, login_attempts, consentement, index LOWER(email)) |
+| Tests | 48/48 Vitest passés (28 unitaires + 20 intégration sur base isolée) ; `db:check` OK ; E2E non installés |
 | Docker | Fichiers prêts, image **non construite** |
 | Coolify | **Non déployé, non vérifié** (accès indisponible) |
-| GitHub | ✔ Synchronisé : `merrabii/jeux-multiplication`, `main` = `cad8393`, 65 fichiers, `AGENTS.md` conservé |
+| GitHub | ✔ Synchronisé : `merrabii/jeux-multiplication`, `main`, `AGENTS.md` conservé |
 
 ## Problèmes connus
 
@@ -58,6 +58,6 @@ npm dev-only et absence d'illustrations définitives).
 
 ## Prochaine étape
 
-Phase 2 — MVP pédagogique : authentification parent, gestion des profils
-enfants, tableau de bord enfant, apprentissage des tables 1 à 10,
-entraînement, défis, enregistrement persistant des réponses.
+Étape 2.2 — Gestion des profils enfants : API `/api/children` autorisée par
+parent propriétaire, écran de sélection d'avatar (seed avatars),
+suppression logique confirmée.

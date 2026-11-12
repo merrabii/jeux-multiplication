@@ -2,6 +2,61 @@
 
 Format : date — version — modifications — fichiers — migrations — tests — impact.
 
+## 2026-11-12 — v0.2.0-phase2.1 (authentification parent)
+
+### Ajouté
+- **Authentification parent complète** :
+  - `features/auth/service.ts` : inscription + connexion (bcrypt 12,
+    e-mail normalisé minuscules, message d'échec générique, comparaison
+    factice anti-oracle temporel, gestion de la course P2002).
+  - `features/auth/rate-limit.ts` : limitation persistée en PostgreSQL —
+    5 échecs max sur fenêtre glissante de 15 min → blocage 15 min,
+    purge des tentatives > 24 h, comptage insensible à la casse,
+    réinitialisation après succès.
+  - `lib/auth/` : `config.ts` (env obligatoires, aucun secret par
+    défaut), `password.ts` (bcrypt), `session-token.ts` (JWT HS256
+    jose), `guards.ts` (`requireParentSession`).
+  - `lib/database/session.ts` : création/résolution/révocation de
+    sessions — la table `sessions` est la source de vérité de la
+    révocation (un JWT copié devient inutilisable après déconnexion).
+  - Server Actions CSRF : `app/parent/auth-actions.ts` (inscription,
+    connexion, déconnexion) — protection Origin intégrée Next.js.
+  - Pages : `/parent/inscription`, `/parent/connexion` (formulaires
+    accessibles, univers magique) ; `/parent` protégé côté serveur.
+  - `scripts/auth-smoke.ts` (vérification manuelle des jetons).
+  - Base de test isolée : `scripts/db-test-setup.ts` +
+    `npm run db:test:setup` (migrations sur `jeux_multiplication_test`).
+- **Tests** : 30 nouveaux (5 mot de passe, 5 jetons JWT, 20 intégration
+  sur base isolée couvrant les 18 scénarios exigés + cas limites).
+  Total : 48/48 passés.
+
+### Modifié
+- `prisma/schema.prisma` : modèles `Session`, `LoginAttempt` ;
+  `users` + `termsAcceptedAt`, `termsVersion`, relations sessions/tentatives.
+- `.env.example` : `AUTH_SECRET`, `TEST_DATABASE_URL`, paramètres de
+  session et de limitation documentés.
+- `vitest.config.ts` : tests d'intégration inclus + `tests/setup.ts`.
+- Design system : tokens bouton (`--color-button`, `--color-button-hover`).
+- Documentation : CURRENT_STATE, FEATURES, DATABASE, API_REFERENCE,
+  SECURITY, ENVIRONMENT, TESTING, AI_HANDOVER.
+
+### Migration
+`20261112172058_add_auth_foundation` — CREATE TABLE `sessions`,
+`login_attempts` ; ALTER TABLE `users` ADD COLUMN (consentement) ;
+index unique `LOWER(email)` ; FK cascade/SetNull. **Non destructive.**
+
+### Tests exécutés (réels)
+- `npm test` → **48/48** (base de test isolée `jeux_multiplication_test`).
+- `npm run lint` → 0 erreur, 0 avertissement.
+- `npm run build` → 7 routes.
+- Protection des routes vérifiée par curl sur serveur standalone :
+  sans session → 307 `/parent/connexion` ; jeton valide → 200 ;
+  jeton révoqué → 307.
+
+### Impact
+Aucune donnée supprimée ; migrations non destructives ; anciens tests
+conservés.
+
 ## 2026-11-12 — v0.1.1 (correction dépôt GitHub)
 
 ### Modifié

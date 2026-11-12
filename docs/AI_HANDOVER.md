@@ -30,7 +30,7 @@ officiel sont préservés via le commit de fusion `4ffb1f6`).
 1. Le CLI ne charge plus `.env` : tout passe par `prisma.config.ts`
    (`import "dotenv/config"`).
 2. Generator `prisma-client` (pas `prisma-client-js`), `output` **obligatoire**
-   → `lib/database/generated` ; import : `./generated/client`.
+   → `lib/database/generated` ; import : `@/lib/database/generated/client`.
 3. Client : `new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`.
 4. `migrate dev` ne lance plus `generate` ni le seed automatiquement.
 5. `latest` npm = 8.0.0 **RC** : ne pas installer sans décision
@@ -46,15 +46,19 @@ officiel sont préservés via le commit de fusion `4ffb1f6`).
 ## Organisation du code
 
 ```
-app/                pages + routes API (contrôles minces)
-app/api/health      healthcheck (ping PostgreSQL)
-features/multiplication/   logique métier pure (tables.ts, engine.ts)
-lib/database/       client Prisma singleton + client généré
-lib/validation/     schémas Zod
-scripts/db-check.ts vérification persistance (données de test nettoyées)
-tests/unit/         tests Vitest (18)
-prisma/             schema + migrations versionnées
-docs/               documentation complète (17 fichiers)
+app/                      pages + routes API (contrôles minces)
+app/api/health            healthcheck (ping PostgreSQL)
+app/parent/               connexion, inscription, dashboard protégé, auth-actions.ts
+components/parent/auth/   formulaires client (useActionState)
+features/auth/            service métier (register/authenticate) + rate-limit
+lib/auth/                 config env, bcrypt, JWT, guards
+lib/database/             client Prisma singleton + sessions + client généré
+lib/validation/           schémas Zod (auth.ts, schemas.ts)
+scripts/                  db-check, db-test-setup, auth-smoke
+tests/unit/               tests Vitest unitaires (28)
+tests/integration/        tests Vitest sur base PostgreSQL isolée (20)
+prisma/                   schema + migrations versionnées (2)
+docs/                     documentation complète
 ```
 
 ## Commandes utiles
@@ -62,7 +66,8 @@ docs/               documentation complète (17 fichiers)
 ```bash
 docker compose up -d db   # PostgreSQL local (5434)
 npm run dev               # développement
-npm test                  # Vitest
+npm test                  # Vitest (unitaires + intégration)
+npm run db:test:setup     # provisionner la base de test isolée
 npm run db:migrate        # migration dev (génère + applique)
 npm run db:generate       # régénérer le client Prisma
 npm run db:deploy         # migrations staging/prod

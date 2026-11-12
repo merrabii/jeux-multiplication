@@ -22,12 +22,53 @@ model User {
   passwordHash String
   displayName  String?
   role         String    @default("parent")
+  /// Traçabilité du consentement aux conditions (RGPD, Phase future).
+  termsAcceptedAt  DateTime?
+  termsVersion     String?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   children     ChildProfile[]
+  sessions     Session[]
+  loginAttempts LoginAttempt[]
 
   @@index([email])
   @@map("users")
+}
+
+/// Session de connexion parent. Source de vérité de la révocation :
+/// un JWT valide est rejeté si la session correspondante est révoquée
+/// ou expirée en base (voir docs/SECURITY.md).
+model Session {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Date d'expiration de la session (alignée sur l'expiration du JWT).
+  expiresAt DateTime
+  /// Déconnexion : horodatage de révocation. Jamais effacé avant purge.
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+/// Tentatives de connexion (persistées, pas en mémoire : la limitation
+/// survit aux redémarrages et protège par adresse e-mail normalisée
+/// en minuscules — contournement par changement de casse impossible).
+model LoginAttempt {
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Adresse e-mail normalisée (minuscules, espaces retirés).
+  email       String
+  success     Boolean
+  /// Adresse IP brute, donnée technique de sécurité, purgée régulièrement.
+  ipAddress   String?
+  attemptedAt DateTime @default(now())
+
+  @@index([email, attemptedAt])
+  @@index([attemptedAt])
+  @@map("login_attempts")
 }
 
 /// Avatar de profil enfant. Données de référence seedées (prisma/seed.ts, Phase 2).
