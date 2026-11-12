@@ -24,7 +24,7 @@ export type GenerateQuestionsInput = z.infer<typeof GENERATE_QUESTIONS_SCHEMA>;
 /** Réponse d'un enfant à une question. */
 export const ANSWER_SCHEMA = z.object({
   questionId: z.string().min(1),
-  answer: z.int().min(0).max(100),
+  answer: z.int().min(0).max(1000),
 });
 
 /** Validation d'un pseudonyme d'enfant : court, sans données personnelles. */

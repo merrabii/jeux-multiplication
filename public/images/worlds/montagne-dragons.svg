@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Montagne des dragons">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fecaca"/><stop offset="1" stop-color="#fed7aa"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="180" fill="url(#sky)"/>
+  <circle cx="264" cy="36" r="17" fill="#fb923c" opacity=".85"/>
+  <!-- montagnes -->
+  <path d="M0 160l90-96 70 96z" fill="#b45309"/>
+  <path d="M90 64l22 24-22 10-16-16z" fill="#fef3c7"/>
+  <path d="M60 160l110-120 150 120z" fill="#92400e"/>
+  <path d="M170 40l30 33-30 13-20-19z" fill="#fffbeb"/>
+  <!-- dragon -->
+  <g transform="translate(64,96)">
+    <path d="M-20 0c-10-14 0-26 12-26-2 12 0 20 8 24z" fill="#f97316"/>
+    <ellipse cx="4" cy="8" rx="22" ry="16" fill="#ea580c"/>
+    <ellipse cx="4" cy="14" rx="13" ry="9" fill="#fed7aa"/>
+    <path d="M-8 -14l-3-9 8 4z" fill="#fbbf24"/>
+    <path d="M16 -14l3-9-8 4z" fill="#fbbf24"/>
+    <circle cx="-2" cy="2" r="3" fill="#7c2d12"/><circle cx="-2" cy="1" r="1" fill="#fff"/>
+    <circle cx="12" cy="2" r="3" fill="#7c2d12"/><circle cx="12" cy="1" r="1" fill="#fff"/>
+    <path d="M2 10q4 3 8 0" fill="none" stroke="#7c2d12" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M34 12c6 3 7 8 3 12-1-4-4-6-7-6 0-3 1-5 4-6z" fill="#fdba74"/>
+  </g>
+  <!-- volcans de fumée -->
+  <path d="M300 160l-20-60 8 0-6-18 10 4 2-10 6 14 8-2-10 20 12 0z" fill="#7c2d12" opacity=".5"/>
+  <circle cx="60" cy="30" r="2" fill="#fff" opacity=".7"/>
+  <circle cx="140" cy="24" r="2.4" fill="#fff" opacity=".6"/>
+</svg>
