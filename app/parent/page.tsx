@@ -9,6 +9,7 @@ import {
   listChildren,
   MAX_CHILDREN_PER_PARENT,
 } from "@/features/children/service";
+import { getChildStats, type ChildStats } from "@/features/children/stats";
 import { prisma } from "@/lib/database/client";
 
 export const metadata: Metadata = {
@@ -27,6 +28,15 @@ export default async function ParentSpacePage() {
     select: { id: true, name: true, imageKey: true },
   });
   const canCreate = children.length < MAX_CHILDREN_PER_PARENT;
+
+  // Statistiques réelles par enfant (agrégats PostgreSQL, ownership vérifié).
+  const statsResults = await Promise.all(
+    children.map((child) => getChildStats(prisma, child.id, user.id)),
+  );
+  const stats = new Map<string, ChildStats>();
+  for (const result of statsResults) {
+    if (result.status === "ok") stats.set(result.stats.childId, result.stats);
+  }
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-12">
@@ -109,6 +119,11 @@ export default async function ParentSpacePage() {
                   </form>
                   <DeleteChildButton childProfileId={child.id} />
                 </div>
+
+                {/* Statistiques pédagogiques (données PostgreSQL réelles) */}
+                {stats.get(child.id) ? (
+                  <ParentChildStats stat={stats.get(child.id)!} />
+                ) : null}
               </li>
             ))}
           </ul>
@@ -127,5 +142,86 @@ export default async function ParentSpacePage() {
         </section>
       )}
     </main>
+  );
+}
+
+/** Panneau de statistiques d'un enfant (espace parent, Étape I). */
+function ParentChildStats({ stat }: { stat: ChildStats }) {
+  return (
+    <div className="rounded-xl border-2 border-magic/20 p-4 text-sm">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-semibold text-card-foreground/85">
+        <span>Sessions : {stat.sessionCount}</span>
+        <span>
+          Réponses : {stat.totalCorrect}/{stat.totalQuestionsAnswered}
+          {stat.overallAccuracy !== null ? ` (${stat.overallAccuracy} %)` : ""}
+        </span>
+        <span>Badges : {stat.badgeCount}</span>
+      </div>
+
+      {stat.masteredTables.length > 0 ? (
+        <p className="mt-2">
+          <span className="font-semibold">Tables maîtrisées :</span>{" "}
+          {stat.masteredTables.join(", ")}
+        </p>
+      ) : (
+        <p className="mt-2 text-card-foreground/70">
+          Aucune leçon validée pour l&apos;instant.
+        </p>
+      )}
+
+      {stat.tablesToReview.length > 0 && (
+        <p className="mt-1 text-error">
+          <span className="font-semibold">À réviser :</span>{" "}
+          {stat.tablesToReview.join(", ")} (moins de 70 % de réussite)
+        </p>
+      )}
+
+      {stat.tables.filter((t) => t.accuracy !== null).length > 0 ? (
+        <table className="mt-3 w-full text-left text-xs">
+          <caption className="sr-only">
+            Résultats par table de {stat.pseudonym}
+          </caption>
+          <thead>
+            <tr className="text-card-foreground/60">
+              <th scope="col" className="py-1">Table</th>
+              <th scope="col" className="py-1">Réussite</th>
+              <th scope="col" className="py-1">Leçons</th>
+              <th scope="col" className="py-1">Défis gagnés</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stat.tables
+              .filter((t) => t.accuracy !== null)
+              .map((t) => (
+                <tr key={t.table} className="border-t border-magic/10">
+                  <td className="py-1 font-bold">{t.table}</td>
+                  <td className="py-1">
+                    {t.accuracy} % ({t.correctCount}/{t.correctCount + t.wrongCount})
+                  </td>
+                  <td className="py-1">{t.lessonsCompleted}</td>
+                  <td className="py-1">{t.challengesPassed}</td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
+      ) : (
+        <p className="mt-2 text-card-foreground/70">
+          Aucune session terminée pour l&apos;instant.
+        </p>
+      )}
+
+      {stat.recentDays.length > 0 ? (
+        <p className="mt-3 text-xs text-card-foreground/70">
+          Activité récente :{" "}
+          {stat.recentDays
+            .slice(0, 3)
+            .map(
+              (d) =>
+                `${d.day.toISOString().slice(0, 10)} : ${d.correctAnswers}/${d.questionsAnswered}`,
+            )
+            .join(" · ")}
+        </p>
+      ) : null}
+    </div>
   );
 }
