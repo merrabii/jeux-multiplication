@@ -9,7 +9,10 @@
 ## État au moment du handover (2026-11-12)
 
 Phase 1 terminée — voir `docs/CURRENT_STATE.md` pour l'état précis et
-`docs/FEATURES.md` pour les statuts prouvés.
+`docs/FEATURES.md` pour les statuts prouvés. Dépôt officiel :
+**https://github.com/merrabii/jeux-multiplication** (`main` = `cad8393`,
+synchronisé — les anciens commits `315a465`/`a0bcf71`/`dc3c2b7` du dépôt
+officiel sont préservés via le commit de fusion `4ffb1f6`).
 
 ## Technologies
 

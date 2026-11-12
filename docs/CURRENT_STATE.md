@@ -49,6 +49,7 @@
 | Tests | 18/18 Vitest passés ; `db:check` OK ; E2E non installés |
 | Docker | Fichiers prêts, image **non construite** |
 | Coolify | **Non déployé, non vérifié** (accès indisponible) |
+| GitHub | ✔ Synchronisé : `merrabii/jeux-multiplication`, `main` = `cad8393`, 65 fichiers, `AGENTS.md` conservé |
 
 ## Problèmes connus
 

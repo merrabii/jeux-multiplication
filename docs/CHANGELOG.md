@@ -2,6 +2,33 @@
 
 Format : date — version — modifications — fichiers — migrations — tests — impact.
 
+## 2026-11-12 — v0.1.1 (correction dépôt GitHub)
+
+### Modifié
+- Remote `origin` corrigé : `stablestreamsllc/jeux-multiplication` →
+  **`merrabii/jeux-multiplication`** (dépôt officiel).
+- `.gitignore` : `!.env.example` pour versionner le modèle d'environnement
+  (le scaffold ignorait `.env*` en bloc, empêchant le suivi de
+  `.env.example` exigé par le Master Prompt).
+
+### Ajouté
+- Commit de fusion `4ffb1f6` reliant les deux historiques (le dépôt
+  officiel avait un historique indépendant contenant uniquement
+  `AGENTS.md`, contenu identique — aucun commit distant perdu, aucun
+  force push utilisé).
+
+### Fichiers
+`.gitignore`, `.env.example` (désormais versionné), `docs/*`.
+
+### Tests
+- `git ls-remote origin` → `cad8393` sur `main` ; `git status` →
+  branche synchronisée sans divergence.
+- 65 fichiers sur `origin/main` (AGENTS.md + docs/ + code Phase 1).
+- Aucune donnée ni migration touchée.
+
+### Impact
+Le dépôt GitHub officiel contient désormais toute la Phase 1.
+
 ## 2026-11-12 — v0.1.0 (Phase 1 : fondations)
 
 ### Ajouté
