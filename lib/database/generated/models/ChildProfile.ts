@@ -29,12 +29,18 @@ export type AggregateChildProfile = {
 export type ChildProfileAvgAggregateOutputType = {
   level: number | null
   totalStars: number | null
+  coins: number | null
+  diamonds: number | null
+  xp: number | null
   dailyGoal: number | null
 }
 
 export type ChildProfileSumAggregateOutputType = {
   level: number | null
   totalStars: number | null
+  coins: number | null
+  diamonds: number | null
+  xp: number | null
   dailyGoal: number | null
 }
 
@@ -45,6 +51,9 @@ export type ChildProfileMinAggregateOutputType = {
   avatarId: string | null
   level: number | null
   totalStars: number | null
+  coins: number | null
+  diamonds: number | null
+  xp: number | null
   dailyGoal: number | null
   deletedAt: Date | null
   createdAt: Date | null
@@ -58,6 +67,9 @@ export type ChildProfileMaxAggregateOutputType = {
   avatarId: string | null
   level: number | null
   totalStars: number | null
+  coins: number | null
+  diamonds: number | null
+  xp: number | null
   dailyGoal: number | null
   deletedAt: Date | null
   createdAt: Date | null
@@ -71,6 +83,9 @@ export type ChildProfileCountAggregateOutputType = {
   avatarId: number
   level: number
   totalStars: number
+  coins: number
+  diamonds: number
+  xp: number
   dailyGoal: number
   deletedAt: number
   createdAt: number
@@ -82,12 +97,18 @@ export type ChildProfileCountAggregateOutputType = {
 export type ChildProfileAvgAggregateInputType = {
   level?: true
   totalStars?: true
+  coins?: true
+  diamonds?: true
+  xp?: true
   dailyGoal?: true
 }
 
 export type ChildProfileSumAggregateInputType = {
   level?: true
   totalStars?: true
+  coins?: true
+  diamonds?: true
+  xp?: true
   dailyGoal?: true
 }
 
@@ -98,6 +119,9 @@ export type ChildProfileMinAggregateInputType = {
   avatarId?: true
   level?: true
   totalStars?: true
+  coins?: true
+  diamonds?: true
+  xp?: true
   dailyGoal?: true
   deletedAt?: true
   createdAt?: true
@@ -111,6 +135,9 @@ export type ChildProfileMaxAggregateInputType = {
   avatarId?: true
   level?: true
   totalStars?: true
+  coins?: true
+  diamonds?: true
+  xp?: true
   dailyGoal?: true
   deletedAt?: true
   createdAt?: true
@@ -124,6 +151,9 @@ export type ChildProfileCountAggregateInputType = {
   avatarId?: true
   level?: true
   totalStars?: true
+  coins?: true
+  diamonds?: true
+  xp?: true
   dailyGoal?: true
   deletedAt?: true
   createdAt?: true
@@ -224,6 +254,9 @@ export type ChildProfileGroupByOutputType = {
   avatarId: string | null
   level: number
   totalStars: number
+  coins: number
+  diamonds: number
+  xp: number
   dailyGoal: number
   deletedAt: Date | null
   createdAt: Date
@@ -260,6 +293,9 @@ export type ChildProfileWhereInput = {
   avatarId?: Prisma.StringNullableFilter<"ChildProfile"> | string | null
   level?: Prisma.IntFilter<"ChildProfile"> | number
   totalStars?: Prisma.IntFilter<"ChildProfile"> | number
+  coins?: Prisma.IntFilter<"ChildProfile"> | number
+  diamonds?: Prisma.IntFilter<"ChildProfile"> | number
+  xp?: Prisma.IntFilter<"ChildProfile"> | number
   dailyGoal?: Prisma.IntFilter<"ChildProfile"> | number
   deletedAt?: Prisma.DateTimeNullableFilter<"ChildProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ChildProfile"> | Date | string
@@ -267,6 +303,12 @@ export type ChildProfileWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   avatar?: Prisma.XOR<Prisma.AvatarNullableScalarRelationFilter, Prisma.AvatarWhereInput> | null
   settings?: Prisma.XOR<Prisma.GameSettingsNullableScalarRelationFilter, Prisma.GameSettingsWhereInput> | null
+  sessions?: Prisma.LearningSessionListRelationFilter
+  questionAttempts?: Prisma.QuestionAttemptListRelationFilter
+  progresses?: Prisma.ChildProgressListRelationFilter
+  masteries?: Prisma.MultiplicationMasteryListRelationFilter
+  badges?: Prisma.ChildBadgeListRelationFilter
+  dailyActivities?: Prisma.DailyActivityListRelationFilter
 }
 
 export type ChildProfileOrderByWithRelationInput = {
@@ -276,6 +318,9 @@ export type ChildProfileOrderByWithRelationInput = {
   avatarId?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -283,6 +328,12 @@ export type ChildProfileOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   avatar?: Prisma.AvatarOrderByWithRelationInput
   settings?: Prisma.GameSettingsOrderByWithRelationInput
+  sessions?: Prisma.LearningSessionOrderByRelationAggregateInput
+  questionAttempts?: Prisma.QuestionAttemptOrderByRelationAggregateInput
+  progresses?: Prisma.ChildProgressOrderByRelationAggregateInput
+  masteries?: Prisma.MultiplicationMasteryOrderByRelationAggregateInput
+  badges?: Prisma.ChildBadgeOrderByRelationAggregateInput
+  dailyActivities?: Prisma.DailyActivityOrderByRelationAggregateInput
 }
 
 export type ChildProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -295,6 +346,9 @@ export type ChildProfileWhereUniqueInput = Prisma.AtLeast<{
   avatarId?: Prisma.StringNullableFilter<"ChildProfile"> | string | null
   level?: Prisma.IntFilter<"ChildProfile"> | number
   totalStars?: Prisma.IntFilter<"ChildProfile"> | number
+  coins?: Prisma.IntFilter<"ChildProfile"> | number
+  diamonds?: Prisma.IntFilter<"ChildProfile"> | number
+  xp?: Prisma.IntFilter<"ChildProfile"> | number
   dailyGoal?: Prisma.IntFilter<"ChildProfile"> | number
   deletedAt?: Prisma.DateTimeNullableFilter<"ChildProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ChildProfile"> | Date | string
@@ -302,6 +356,12 @@ export type ChildProfileWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   avatar?: Prisma.XOR<Prisma.AvatarNullableScalarRelationFilter, Prisma.AvatarWhereInput> | null
   settings?: Prisma.XOR<Prisma.GameSettingsNullableScalarRelationFilter, Prisma.GameSettingsWhereInput> | null
+  sessions?: Prisma.LearningSessionListRelationFilter
+  questionAttempts?: Prisma.QuestionAttemptListRelationFilter
+  progresses?: Prisma.ChildProgressListRelationFilter
+  masteries?: Prisma.MultiplicationMasteryListRelationFilter
+  badges?: Prisma.ChildBadgeListRelationFilter
+  dailyActivities?: Prisma.DailyActivityListRelationFilter
 }, "id">
 
 export type ChildProfileOrderByWithAggregationInput = {
@@ -311,6 +371,9 @@ export type ChildProfileOrderByWithAggregationInput = {
   avatarId?: Prisma.SortOrderInput | Prisma.SortOrder
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -332,6 +395,9 @@ export type ChildProfileScalarWhereWithAggregatesInput = {
   avatarId?: Prisma.StringNullableWithAggregatesFilter<"ChildProfile"> | string | null
   level?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
   totalStars?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
+  coins?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
+  diamonds?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
+  xp?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
   dailyGoal?: Prisma.IntWithAggregatesFilter<"ChildProfile"> | number
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ChildProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ChildProfile"> | Date | string
@@ -343,6 +409,9 @@ export type ChildProfileCreateInput = {
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -350,6 +419,12 @@ export type ChildProfileCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutChildrenInput
   avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
   settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileUncheckedCreateInput = {
@@ -359,11 +434,20 @@ export type ChildProfileUncheckedCreateInput = {
   avatarId?: string | null
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileUpdateInput = {
@@ -371,6 +455,9 @@ export type ChildProfileUpdateInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,6 +465,12 @@ export type ChildProfileUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
   avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
   settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateInput = {
@@ -387,11 +480,20 @@ export type ChildProfileUncheckedUpdateInput = {
   avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileCreateManyInput = {
@@ -401,6 +503,9 @@ export type ChildProfileCreateManyInput = {
   avatarId?: string | null
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -412,6 +517,9 @@ export type ChildProfileUpdateManyMutationInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -425,6 +533,9 @@ export type ChildProfileUncheckedUpdateManyInput = {
   avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -448,6 +559,9 @@ export type ChildProfileCountOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -457,6 +571,9 @@ export type ChildProfileCountOrderByAggregateInput = {
 export type ChildProfileAvgOrderByAggregateInput = {
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
 }
 
@@ -467,6 +584,9 @@ export type ChildProfileMaxOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -480,6 +600,9 @@ export type ChildProfileMinOrderByAggregateInput = {
   avatarId?: Prisma.SortOrder
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -489,6 +612,9 @@ export type ChildProfileMinOrderByAggregateInput = {
 export type ChildProfileSumOrderByAggregateInput = {
   level?: Prisma.SortOrder
   totalStars?: Prisma.SortOrder
+  coins?: Prisma.SortOrder
+  diamonds?: Prisma.SortOrder
+  xp?: Prisma.SortOrder
   dailyGoal?: Prisma.SortOrder
 }
 
@@ -603,17 +729,110 @@ export type ChildProfileUpdateOneRequiredWithoutSettingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutSettingsInput, Prisma.ChildProfileUpdateWithoutSettingsInput>, Prisma.ChildProfileUncheckedUpdateWithoutSettingsInput>
 }
 
+export type ChildProfileCreateNestedOneWithoutSessionsInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutSessionsInput, Prisma.ChildProfileUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutSessionsInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutSessionsInput, Prisma.ChildProfileUncheckedCreateWithoutSessionsInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutSessionsInput
+  upsert?: Prisma.ChildProfileUpsertWithoutSessionsInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutSessionsInput, Prisma.ChildProfileUpdateWithoutSessionsInput>, Prisma.ChildProfileUncheckedUpdateWithoutSessionsInput>
+}
+
+export type ChildProfileCreateNestedOneWithoutQuestionAttemptsInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedCreateWithoutQuestionAttemptsInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutQuestionAttemptsInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutQuestionAttemptsNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedCreateWithoutQuestionAttemptsInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutQuestionAttemptsInput
+  upsert?: Prisma.ChildProfileUpsertWithoutQuestionAttemptsInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutQuestionAttemptsInput, Prisma.ChildProfileUpdateWithoutQuestionAttemptsInput>, Prisma.ChildProfileUncheckedUpdateWithoutQuestionAttemptsInput>
+}
+
+export type ChildProfileCreateNestedOneWithoutProgressesInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutProgressesInput, Prisma.ChildProfileUncheckedCreateWithoutProgressesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutProgressesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutProgressesNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutProgressesInput, Prisma.ChildProfileUncheckedCreateWithoutProgressesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutProgressesInput
+  upsert?: Prisma.ChildProfileUpsertWithoutProgressesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutProgressesInput, Prisma.ChildProfileUpdateWithoutProgressesInput>, Prisma.ChildProfileUncheckedUpdateWithoutProgressesInput>
+}
+
+export type ChildProfileCreateNestedOneWithoutMasteriesInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutMasteriesInput, Prisma.ChildProfileUncheckedCreateWithoutMasteriesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutMasteriesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutMasteriesNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutMasteriesInput, Prisma.ChildProfileUncheckedCreateWithoutMasteriesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutMasteriesInput
+  upsert?: Prisma.ChildProfileUpsertWithoutMasteriesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutMasteriesInput, Prisma.ChildProfileUpdateWithoutMasteriesInput>, Prisma.ChildProfileUncheckedUpdateWithoutMasteriesInput>
+}
+
+export type ChildProfileCreateNestedOneWithoutBadgesInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutBadgesInput, Prisma.ChildProfileUncheckedCreateWithoutBadgesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutBadgesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutBadgesNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutBadgesInput, Prisma.ChildProfileUncheckedCreateWithoutBadgesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutBadgesInput
+  upsert?: Prisma.ChildProfileUpsertWithoutBadgesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutBadgesInput, Prisma.ChildProfileUpdateWithoutBadgesInput>, Prisma.ChildProfileUncheckedUpdateWithoutBadgesInput>
+}
+
+export type ChildProfileCreateNestedOneWithoutDailyActivitiesInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedCreateWithoutDailyActivitiesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutDailyActivitiesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+}
+
+export type ChildProfileUpdateOneRequiredWithoutDailyActivitiesNestedInput = {
+  create?: Prisma.XOR<Prisma.ChildProfileCreateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedCreateWithoutDailyActivitiesInput>
+  connectOrCreate?: Prisma.ChildProfileCreateOrConnectWithoutDailyActivitiesInput
+  upsert?: Prisma.ChildProfileUpsertWithoutDailyActivitiesInput
+  connect?: Prisma.ChildProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ChildProfileUpdateToOneWithWhereWithoutDailyActivitiesInput, Prisma.ChildProfileUpdateWithoutDailyActivitiesInput>, Prisma.ChildProfileUncheckedUpdateWithoutDailyActivitiesInput>
+}
+
 export type ChildProfileCreateWithoutUserInput = {
   id?: string
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
   settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileUncheckedCreateWithoutUserInput = {
@@ -622,11 +841,20 @@ export type ChildProfileUncheckedCreateWithoutUserInput = {
   avatarId?: string | null
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileCreateOrConnectWithoutUserInput = {
@@ -665,6 +893,9 @@ export type ChildProfileScalarWhereInput = {
   avatarId?: Prisma.StringNullableFilter<"ChildProfile"> | string | null
   level?: Prisma.IntFilter<"ChildProfile"> | number
   totalStars?: Prisma.IntFilter<"ChildProfile"> | number
+  coins?: Prisma.IntFilter<"ChildProfile"> | number
+  diamonds?: Prisma.IntFilter<"ChildProfile"> | number
+  xp?: Prisma.IntFilter<"ChildProfile"> | number
   dailyGoal?: Prisma.IntFilter<"ChildProfile"> | number
   deletedAt?: Prisma.DateTimeNullableFilter<"ChildProfile"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"ChildProfile"> | Date | string
@@ -676,12 +907,21 @@ export type ChildProfileCreateWithoutAvatarInput = {
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutChildrenInput
   settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileUncheckedCreateWithoutAvatarInput = {
@@ -690,11 +930,20 @@ export type ChildProfileUncheckedCreateWithoutAvatarInput = {
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileCreateOrConnectWithoutAvatarInput = {
@@ -728,12 +977,21 @@ export type ChildProfileCreateWithoutSettingsInput = {
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutChildrenInput
   avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileUncheckedCreateWithoutSettingsInput = {
@@ -743,10 +1001,19 @@ export type ChildProfileUncheckedCreateWithoutSettingsInput = {
   avatarId?: string | null
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
 }
 
 export type ChildProfileCreateOrConnectWithoutSettingsInput = {
@@ -770,12 +1037,21 @@ export type ChildProfileUpdateWithoutSettingsInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
   avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateWithoutSettingsInput = {
@@ -785,10 +1061,643 @@ export type ChildProfileUncheckedUpdateWithoutSettingsInput = {
   avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutSessionsInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutSessionsInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutSessionsInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutSessionsInput, Prisma.ChildProfileUncheckedCreateWithoutSessionsInput>
+}
+
+export type ChildProfileUpsertWithoutSessionsInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutSessionsInput, Prisma.ChildProfileUncheckedUpdateWithoutSessionsInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutSessionsInput, Prisma.ChildProfileUncheckedCreateWithoutSessionsInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutSessionsInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutSessionsInput, Prisma.ChildProfileUncheckedUpdateWithoutSessionsInput>
+}
+
+export type ChildProfileUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutQuestionAttemptsInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutQuestionAttemptsInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutQuestionAttemptsInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedCreateWithoutQuestionAttemptsInput>
+}
+
+export type ChildProfileUpsertWithoutQuestionAttemptsInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedUpdateWithoutQuestionAttemptsInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedCreateWithoutQuestionAttemptsInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutQuestionAttemptsInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutQuestionAttemptsInput, Prisma.ChildProfileUncheckedUpdateWithoutQuestionAttemptsInput>
+}
+
+export type ChildProfileUpdateWithoutQuestionAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutQuestionAttemptsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutProgressesInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutProgressesInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutProgressesInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutProgressesInput, Prisma.ChildProfileUncheckedCreateWithoutProgressesInput>
+}
+
+export type ChildProfileUpsertWithoutProgressesInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutProgressesInput, Prisma.ChildProfileUncheckedUpdateWithoutProgressesInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutProgressesInput, Prisma.ChildProfileUncheckedCreateWithoutProgressesInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutProgressesInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutProgressesInput, Prisma.ChildProfileUncheckedUpdateWithoutProgressesInput>
+}
+
+export type ChildProfileUpdateWithoutProgressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutProgressesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutMasteriesInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutMasteriesInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutMasteriesInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutMasteriesInput, Prisma.ChildProfileUncheckedCreateWithoutMasteriesInput>
+}
+
+export type ChildProfileUpsertWithoutMasteriesInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutMasteriesInput, Prisma.ChildProfileUncheckedUpdateWithoutMasteriesInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutMasteriesInput, Prisma.ChildProfileUncheckedCreateWithoutMasteriesInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutMasteriesInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutMasteriesInput, Prisma.ChildProfileUncheckedUpdateWithoutMasteriesInput>
+}
+
+export type ChildProfileUpdateWithoutMasteriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutMasteriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutBadgesInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutBadgesInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  dailyActivities?: Prisma.DailyActivityUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutBadgesInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutBadgesInput, Prisma.ChildProfileUncheckedCreateWithoutBadgesInput>
+}
+
+export type ChildProfileUpsertWithoutBadgesInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutBadgesInput, Prisma.ChildProfileUncheckedUpdateWithoutBadgesInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutBadgesInput, Prisma.ChildProfileUncheckedCreateWithoutBadgesInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutBadgesInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutBadgesInput, Prisma.ChildProfileUncheckedUpdateWithoutBadgesInput>
+}
+
+export type ChildProfileUpdateWithoutBadgesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutBadgesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileCreateWithoutDailyActivitiesInput = {
+  id?: string
+  pseudonym: string
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutChildrenInput
+  avatar?: Prisma.AvatarCreateNestedOneWithoutProfilesInput
+  settings?: Prisma.GameSettingsCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileUncheckedCreateWithoutDailyActivitiesInput = {
+  id?: string
+  userId: string
+  pseudonym: string
+  avatarId?: string | null
+  level?: number
+  totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
+  dailyGoal?: number
+  deletedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  settings?: Prisma.GameSettingsUncheckedCreateNestedOneWithoutChildProfileInput
+  sessions?: Prisma.LearningSessionUncheckedCreateNestedManyWithoutChildProfileInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedCreateNestedManyWithoutChildProfileInput
+  progresses?: Prisma.ChildProgressUncheckedCreateNestedManyWithoutChildProfileInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedCreateNestedManyWithoutChildProfileInput
+  badges?: Prisma.ChildBadgeUncheckedCreateNestedManyWithoutChildProfileInput
+}
+
+export type ChildProfileCreateOrConnectWithoutDailyActivitiesInput = {
+  where: Prisma.ChildProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedCreateWithoutDailyActivitiesInput>
+}
+
+export type ChildProfileUpsertWithoutDailyActivitiesInput = {
+  update: Prisma.XOR<Prisma.ChildProfileUpdateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedUpdateWithoutDailyActivitiesInput>
+  create: Prisma.XOR<Prisma.ChildProfileCreateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedCreateWithoutDailyActivitiesInput>
+  where?: Prisma.ChildProfileWhereInput
+}
+
+export type ChildProfileUpdateToOneWithWhereWithoutDailyActivitiesInput = {
+  where?: Prisma.ChildProfileWhereInput
+  data: Prisma.XOR<Prisma.ChildProfileUpdateWithoutDailyActivitiesInput, Prisma.ChildProfileUncheckedUpdateWithoutDailyActivitiesInput>
+}
+
+export type ChildProfileUpdateWithoutDailyActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
+  avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
+  settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+}
+
+export type ChildProfileUncheckedUpdateWithoutDailyActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
+  avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
+  dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileCreateManyUserInput = {
@@ -797,6 +1706,9 @@ export type ChildProfileCreateManyUserInput = {
   avatarId?: string | null
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -808,12 +1720,21 @@ export type ChildProfileUpdateWithoutUserInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   avatar?: Prisma.AvatarUpdateOneWithoutProfilesNestedInput
   settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateWithoutUserInput = {
@@ -822,11 +1743,20 @@ export type ChildProfileUncheckedUpdateWithoutUserInput = {
   avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateManyWithoutUserInput = {
@@ -835,6 +1765,9 @@ export type ChildProfileUncheckedUpdateManyWithoutUserInput = {
   avatarId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -847,6 +1780,9 @@ export type ChildProfileCreateManyAvatarInput = {
   pseudonym: string
   level?: number
   totalStars?: number
+  coins?: number
+  diamonds?: number
+  xp?: number
   dailyGoal?: number
   deletedAt?: Date | string | null
   createdAt?: Date | string
@@ -858,12 +1794,21 @@ export type ChildProfileUpdateWithoutAvatarInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutChildrenNestedInput
   settings?: Prisma.GameSettingsUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateWithoutAvatarInput = {
@@ -872,11 +1817,20 @@ export type ChildProfileUncheckedUpdateWithoutAvatarInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   settings?: Prisma.GameSettingsUncheckedUpdateOneWithoutChildProfileNestedInput
+  sessions?: Prisma.LearningSessionUncheckedUpdateManyWithoutChildProfileNestedInput
+  questionAttempts?: Prisma.QuestionAttemptUncheckedUpdateManyWithoutChildProfileNestedInput
+  progresses?: Prisma.ChildProgressUncheckedUpdateManyWithoutChildProfileNestedInput
+  masteries?: Prisma.MultiplicationMasteryUncheckedUpdateManyWithoutChildProfileNestedInput
+  badges?: Prisma.ChildBadgeUncheckedUpdateManyWithoutChildProfileNestedInput
+  dailyActivities?: Prisma.DailyActivityUncheckedUpdateManyWithoutChildProfileNestedInput
 }
 
 export type ChildProfileUncheckedUpdateManyWithoutAvatarInput = {
@@ -885,12 +1839,89 @@ export type ChildProfileUncheckedUpdateManyWithoutAvatarInput = {
   pseudonym?: Prisma.StringFieldUpdateOperationsInput | string
   level?: Prisma.IntFieldUpdateOperationsInput | number
   totalStars?: Prisma.IntFieldUpdateOperationsInput | number
+  coins?: Prisma.IntFieldUpdateOperationsInput | number
+  diamonds?: Prisma.IntFieldUpdateOperationsInput | number
+  xp?: Prisma.IntFieldUpdateOperationsInput | number
   dailyGoal?: Prisma.IntFieldUpdateOperationsInput | number
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+
+/**
+ * Count Type ChildProfileCountOutputType
+ */
+
+export type ChildProfileCountOutputType = {
+  sessions: number
+  questionAttempts: number
+  progresses: number
+  masteries: number
+  badges: number
+  dailyActivities: number
+}
+
+export type ChildProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  sessions?: boolean | ChildProfileCountOutputTypeCountSessionsArgs
+  questionAttempts?: boolean | ChildProfileCountOutputTypeCountQuestionAttemptsArgs
+  progresses?: boolean | ChildProfileCountOutputTypeCountProgressesArgs
+  masteries?: boolean | ChildProfileCountOutputTypeCountMasteriesArgs
+  badges?: boolean | ChildProfileCountOutputTypeCountBadgesArgs
+  dailyActivities?: boolean | ChildProfileCountOutputTypeCountDailyActivitiesArgs
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChildProfileCountOutputType
+   */
+  select?: Prisma.ChildProfileCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LearningSessionWhereInput
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountQuestionAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuestionAttemptWhereInput
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountProgressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChildProgressWhereInput
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountMasteriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MultiplicationMasteryWhereInput
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountBadgesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ChildBadgeWhereInput
+}
+
+/**
+ * ChildProfileCountOutputType without action
+ */
+export type ChildProfileCountOutputTypeCountDailyActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DailyActivityWhereInput
+}
 
 
 export type ChildProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -900,6 +1931,9 @@ export type ChildProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   avatarId?: boolean
   level?: boolean
   totalStars?: boolean
+  coins?: boolean
+  diamonds?: boolean
+  xp?: boolean
   dailyGoal?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -907,6 +1941,13 @@ export type ChildProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   avatar?: boolean | Prisma.ChildProfile$avatarArgs<ExtArgs>
   settings?: boolean | Prisma.ChildProfile$settingsArgs<ExtArgs>
+  sessions?: boolean | Prisma.ChildProfile$sessionsArgs<ExtArgs>
+  questionAttempts?: boolean | Prisma.ChildProfile$questionAttemptsArgs<ExtArgs>
+  progresses?: boolean | Prisma.ChildProfile$progressesArgs<ExtArgs>
+  masteries?: boolean | Prisma.ChildProfile$masteriesArgs<ExtArgs>
+  badges?: boolean | Prisma.ChildProfile$badgesArgs<ExtArgs>
+  dailyActivities?: boolean | Prisma.ChildProfile$dailyActivitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.ChildProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["childProfile"]>
 
 export type ChildProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -916,6 +1957,9 @@ export type ChildProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   avatarId?: boolean
   level?: boolean
   totalStars?: boolean
+  coins?: boolean
+  diamonds?: boolean
+  xp?: boolean
   dailyGoal?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -931,6 +1975,9 @@ export type ChildProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   avatarId?: boolean
   level?: boolean
   totalStars?: boolean
+  coins?: boolean
+  diamonds?: boolean
+  xp?: boolean
   dailyGoal?: boolean
   deletedAt?: boolean
   createdAt?: boolean
@@ -946,17 +1993,27 @@ export type ChildProfileSelectScalar = {
   avatarId?: boolean
   level?: boolean
   totalStars?: boolean
+  coins?: boolean
+  diamonds?: boolean
+  xp?: boolean
   dailyGoal?: boolean
   deletedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ChildProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pseudonym" | "avatarId" | "level" | "totalStars" | "dailyGoal" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["childProfile"]>
+export type ChildProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "pseudonym" | "avatarId" | "level" | "totalStars" | "coins" | "diamonds" | "xp" | "dailyGoal" | "deletedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["childProfile"]>
 export type ChildProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   avatar?: boolean | Prisma.ChildProfile$avatarArgs<ExtArgs>
   settings?: boolean | Prisma.ChildProfile$settingsArgs<ExtArgs>
+  sessions?: boolean | Prisma.ChildProfile$sessionsArgs<ExtArgs>
+  questionAttempts?: boolean | Prisma.ChildProfile$questionAttemptsArgs<ExtArgs>
+  progresses?: boolean | Prisma.ChildProfile$progressesArgs<ExtArgs>
+  masteries?: boolean | Prisma.ChildProfile$masteriesArgs<ExtArgs>
+  badges?: boolean | Prisma.ChildProfile$badgesArgs<ExtArgs>
+  dailyActivities?: boolean | Prisma.ChildProfile$dailyActivitiesArgs<ExtArgs>
+  _count?: boolean | Prisma.ChildProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ChildProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -973,6 +2030,12 @@ export type $ChildProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     user: Prisma.$UserPayload<ExtArgs>
     avatar: Prisma.$AvatarPayload<ExtArgs> | null
     settings: Prisma.$GameSettingsPayload<ExtArgs> | null
+    sessions: Prisma.$LearningSessionPayload<ExtArgs>[]
+    questionAttempts: Prisma.$QuestionAttemptPayload<ExtArgs>[]
+    progresses: Prisma.$ChildProgressPayload<ExtArgs>[]
+    masteries: Prisma.$MultiplicationMasteryPayload<ExtArgs>[]
+    badges: Prisma.$ChildBadgePayload<ExtArgs>[]
+    dailyActivities: Prisma.$DailyActivityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -981,6 +2044,12 @@ export type $ChildProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     avatarId: string | null
     level: number
     totalStars: number
+    /**
+     * Monnaies de gamification (attribuées UNIQUEMENT côté serveur).
+     */
+    coins: number
+    diamonds: number
+    xp: number
     /**
      * Objectif quotidien en questions réussies.
      */
@@ -1388,6 +2457,12 @@ export interface Prisma__ChildProfileClient<T, Null = never, ExtArgs extends run
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   avatar<T extends Prisma.ChildProfile$avatarArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$avatarArgs<ExtArgs>>): Prisma.Prisma__AvatarClient<runtime.Types.Result.GetResult<Prisma.$AvatarPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   settings<T extends Prisma.ChildProfile$settingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$settingsArgs<ExtArgs>>): Prisma.Prisma__GameSettingsClient<runtime.Types.Result.GetResult<Prisma.$GameSettingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  sessions<T extends Prisma.ChildProfile$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LearningSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  questionAttempts<T extends Prisma.ChildProfile$questionAttemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$questionAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuestionAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  progresses<T extends Prisma.ChildProfile$progressesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$progressesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChildProgressPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  masteries<T extends Prisma.ChildProfile$masteriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$masteriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MultiplicationMasteryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  badges<T extends Prisma.ChildProfile$badgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChildBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  dailyActivities<T extends Prisma.ChildProfile$dailyActivitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ChildProfile$dailyActivitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DailyActivityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1423,6 +2498,9 @@ export interface ChildProfileFieldRefs {
   readonly avatarId: Prisma.FieldRef<"ChildProfile", 'String'>
   readonly level: Prisma.FieldRef<"ChildProfile", 'Int'>
   readonly totalStars: Prisma.FieldRef<"ChildProfile", 'Int'>
+  readonly coins: Prisma.FieldRef<"ChildProfile", 'Int'>
+  readonly diamonds: Prisma.FieldRef<"ChildProfile", 'Int'>
+  readonly xp: Prisma.FieldRef<"ChildProfile", 'Int'>
   readonly dailyGoal: Prisma.FieldRef<"ChildProfile", 'Int'>
   readonly deletedAt: Prisma.FieldRef<"ChildProfile", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"ChildProfile", 'DateTime'>
@@ -1863,6 +2941,150 @@ export type ChildProfile$settingsArgs<ExtArgs extends runtime.Types.Extensions.I
    */
   include?: Prisma.GameSettingsInclude<ExtArgs> | null
   where?: Prisma.GameSettingsWhereInput
+}
+
+/**
+ * ChildProfile.sessions
+ */
+export type ChildProfile$sessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LearningSession
+   */
+  select?: Prisma.LearningSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LearningSession
+   */
+  omit?: Prisma.LearningSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LearningSessionInclude<ExtArgs> | null
+  where?: Prisma.LearningSessionWhereInput
+  orderBy?: Prisma.LearningSessionOrderByWithRelationInput | Prisma.LearningSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LearningSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LearningSessionScalarFieldEnum | Prisma.LearningSessionScalarFieldEnum[]
+}
+
+/**
+ * ChildProfile.questionAttempts
+ */
+export type ChildProfile$questionAttemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QuestionAttempt
+   */
+  select?: Prisma.QuestionAttemptSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QuestionAttempt
+   */
+  omit?: Prisma.QuestionAttemptOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuestionAttemptInclude<ExtArgs> | null
+  where?: Prisma.QuestionAttemptWhereInput
+  orderBy?: Prisma.QuestionAttemptOrderByWithRelationInput | Prisma.QuestionAttemptOrderByWithRelationInput[]
+  cursor?: Prisma.QuestionAttemptWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuestionAttemptScalarFieldEnum | Prisma.QuestionAttemptScalarFieldEnum[]
+}
+
+/**
+ * ChildProfile.progresses
+ */
+export type ChildProfile$progressesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChildProgress
+   */
+  select?: Prisma.ChildProgressSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChildProgress
+   */
+  omit?: Prisma.ChildProgressOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChildProgressInclude<ExtArgs> | null
+  where?: Prisma.ChildProgressWhereInput
+  orderBy?: Prisma.ChildProgressOrderByWithRelationInput | Prisma.ChildProgressOrderByWithRelationInput[]
+  cursor?: Prisma.ChildProgressWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChildProgressScalarFieldEnum | Prisma.ChildProgressScalarFieldEnum[]
+}
+
+/**
+ * ChildProfile.masteries
+ */
+export type ChildProfile$masteriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MultiplicationMastery
+   */
+  select?: Prisma.MultiplicationMasterySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MultiplicationMastery
+   */
+  omit?: Prisma.MultiplicationMasteryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MultiplicationMasteryInclude<ExtArgs> | null
+  where?: Prisma.MultiplicationMasteryWhereInput
+  orderBy?: Prisma.MultiplicationMasteryOrderByWithRelationInput | Prisma.MultiplicationMasteryOrderByWithRelationInput[]
+  cursor?: Prisma.MultiplicationMasteryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MultiplicationMasteryScalarFieldEnum | Prisma.MultiplicationMasteryScalarFieldEnum[]
+}
+
+/**
+ * ChildProfile.badges
+ */
+export type ChildProfile$badgesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ChildBadge
+   */
+  select?: Prisma.ChildBadgeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ChildBadge
+   */
+  omit?: Prisma.ChildBadgeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ChildBadgeInclude<ExtArgs> | null
+  where?: Prisma.ChildBadgeWhereInput
+  orderBy?: Prisma.ChildBadgeOrderByWithRelationInput | Prisma.ChildBadgeOrderByWithRelationInput[]
+  cursor?: Prisma.ChildBadgeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ChildBadgeScalarFieldEnum | Prisma.ChildBadgeScalarFieldEnum[]
+}
+
+/**
+ * ChildProfile.dailyActivities
+ */
+export type ChildProfile$dailyActivitiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DailyActivity
+   */
+  select?: Prisma.DailyActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DailyActivity
+   */
+  omit?: Prisma.DailyActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DailyActivityInclude<ExtArgs> | null
+  where?: Prisma.DailyActivityWhereInput
+  orderBy?: Prisma.DailyActivityOrderByWithRelationInput | Prisma.DailyActivityOrderByWithRelationInput[]
+  cursor?: Prisma.DailyActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DailyActivityScalarFieldEnum | Prisma.DailyActivityScalarFieldEnum[]
 }
 
 /**

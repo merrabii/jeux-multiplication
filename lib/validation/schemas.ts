@@ -36,4 +36,16 @@ export const CHILD_PSEUDONYM_SCHEMA = z
   .regex(
     /^[a-zA-ZÀ-ÿ0-9 \-']+$/,
     "Lettres, chiffres, espaces et tirets uniquement",
+  )
+  // Minimisation des données : au moins 2 lettres (pas un simple numéro),
+  // et aucun motif d'adresse (rue, avenue, etc.) ni numéro de téléphone.
+  .refine((value) => /[a-zA-ZÀ-ÿ]{2}/.test(value), {
+    message: "Le pseudonyme doit contenir au moins deux lettres",
+  })
+  .refine(
+    (value) =>
+      !/\d+\s*(rue|avenue|av\.?|place|impasse|boulevard|bd|chemin|all[ée]e|route|voie|r[ée]sidence|appt\.?|appartement)/i.test(
+        value,
+      ) && !/(?:\d[ .-]?){9,}/.test(value),
+    { message: "Aucune donnée personnelle (adresse, téléphone)" },
   );

@@ -56,7 +56,13 @@ export const ModelName = {
   LoginAttempt: 'LoginAttempt',
   Avatar: 'Avatar',
   ChildProfile: 'ChildProfile',
-  GameSettings: 'GameSettings'
+  GameSettings: 'GameSettings',
+  LearningSession: 'LearningSession',
+  QuestionAttempt: 'QuestionAttempt',
+  ChildProgress: 'ChildProgress',
+  MultiplicationMastery: 'MultiplicationMastery',
+  ChildBadge: 'ChildBadge',
+  DailyActivity: 'DailyActivity'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -131,6 +137,9 @@ export const ChildProfileScalarFieldEnum = {
   avatarId: 'avatarId',
   level: 'level',
   totalStars: 'totalStars',
+  coins: 'coins',
+  diamonds: 'diamonds',
+  xp: 'xp',
   dailyGoal: 'dailyGoal',
   deletedAt: 'deletedAt',
   createdAt: 'createdAt',
@@ -155,6 +164,97 @@ export const GameSettingsScalarFieldEnum = {
 } as const
 
 export type GameSettingsScalarFieldEnum = (typeof GameSettingsScalarFieldEnum)[keyof typeof GameSettingsScalarFieldEnum]
+
+
+export const LearningSessionScalarFieldEnum = {
+  id: 'id',
+  childProfileId: 'childProfileId',
+  kind: 'kind',
+  tableList: 'tableList',
+  difficulty: 'difficulty',
+  questionCount: 'questionCount',
+  correctCount: 'correctCount',
+  wrongCount: 'wrongCount',
+  durationSeconds: 'durationSeconds',
+  targetPercent: 'targetPercent',
+  starsEarned: 'starsEarned',
+  xpEarned: 'xpEarned',
+  coinsEarned: 'coinsEarned',
+  completedAt: 'completedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type LearningSessionScalarFieldEnum = (typeof LearningSessionScalarFieldEnum)[keyof typeof LearningSessionScalarFieldEnum]
+
+
+export const QuestionAttemptScalarFieldEnum = {
+  id: 'id',
+  sessionId: 'sessionId',
+  childProfileId: 'childProfileId',
+  a: 'a',
+  b: 'b',
+  offeredChoices: 'offeredChoices',
+  givenAnswer: 'givenAnswer',
+  isCorrect: 'isCorrect',
+  answeredAt: 'answeredAt'
+} as const
+
+export type QuestionAttemptScalarFieldEnum = (typeof QuestionAttemptScalarFieldEnum)[keyof typeof QuestionAttemptScalarFieldEnum]
+
+
+export const ChildProgressScalarFieldEnum = {
+  id: 'id',
+  childProfileId: 'childProfileId',
+  table: 'table',
+  lessonsCompleted: 'lessonsCompleted',
+  practiceSessions: 'practiceSessions',
+  challengesPassed: 'challengesPassed',
+  correctCount: 'correctCount',
+  wrongCount: 'wrongCount',
+  lastPracticedAt: 'lastPracticedAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ChildProgressScalarFieldEnum = (typeof ChildProgressScalarFieldEnum)[keyof typeof ChildProgressScalarFieldEnum]
+
+
+export const MultiplicationMasteryScalarFieldEnum = {
+  id: 'id',
+  childProfileId: 'childProfileId',
+  a: 'a',
+  b: 'b',
+  correctCount: 'correctCount',
+  wrongCount: 'wrongCount',
+  masteryLevel: 'masteryLevel',
+  nextReviewAt: 'nextReviewAt',
+  lastReviewedAt: 'lastReviewedAt'
+} as const
+
+export type MultiplicationMasteryScalarFieldEnum = (typeof MultiplicationMasteryScalarFieldEnum)[keyof typeof MultiplicationMasteryScalarFieldEnum]
+
+
+export const ChildBadgeScalarFieldEnum = {
+  id: 'id',
+  childProfileId: 'childProfileId',
+  badgeKey: 'badgeKey',
+  earnedAt: 'earnedAt'
+} as const
+
+export type ChildBadgeScalarFieldEnum = (typeof ChildBadgeScalarFieldEnum)[keyof typeof ChildBadgeScalarFieldEnum]
+
+
+export const DailyActivityScalarFieldEnum = {
+  id: 'id',
+  childProfileId: 'childProfileId',
+  day: 'day',
+  questionsAnswered: 'questionsAnswered',
+  correctAnswers: 'correctAnswers',
+  starsEarned: 'starsEarned',
+  xpEarned: 'xpEarned',
+  sessionCount: 'sessionCount'
+} as const
+
+export type DailyActivityScalarFieldEnum = (typeof DailyActivityScalarFieldEnum)[keyof typeof DailyActivityScalarFieldEnum]
 
 
 export const SortOrder = {

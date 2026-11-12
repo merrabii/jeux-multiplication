@@ -51,3 +51,37 @@ export type ChildProfile = Prisma.ChildProfileModel
  * Paramètres de jeu par profil enfant, modifiables uniquement depuis l'espace parent.
  */
 export type GameSettings = Prisma.GameSettingsModel
+/**
+ * Model LearningSession
+ * Session de jeu (leçon, entraînement ou défi). Les questions et les
+ * récompenses sont validées côté serveur : le navigateur ne soumet
+ * jamais un score.
+ */
+export type LearningSession = Prisma.LearningSessionModel
+/**
+ * Model QuestionAttempt
+ * Une question posée dans une session et la réponse de l'enfant.
+ * La réponse attendue n'est JAMAIS envoyée au navigateur avant la
+ * validation ; elle est enregistrée ici par le serveur.
+ */
+export type QuestionAttempt = Prisma.QuestionAttemptModel
+/**
+ * Model ChildProgress
+ * Progression agrégée par table pour un enfant.
+ */
+export type ChildProgress = Prisma.ChildProgressModel
+/**
+ * Model MultiplicationMastery
+ * Maîtrise fine par multiplication (a×b), alimente la révision espacée.
+ */
+export type MultiplicationMastery = Prisma.MultiplicationMasteryModel
+/**
+ * Model ChildBadge
+ * Badge gagné par un enfant (clé = définition dans features/rewards).
+ */
+export type ChildBadge = Prisma.ChildBadgeModel
+/**
+ * Model DailyActivity
+ * Activité agrégée par jour (tableau de bord + missions quotidiennes).
+ */
+export type DailyActivity = Prisma.DailyActivityModel

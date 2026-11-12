@@ -55,7 +55,13 @@ async function main() {
     env: { ...process.env, DATABASE_URL: testUrl },
   });
 
-  console.log("\n✅ Base de test prête (migrations appliquées).");
+  // Seed des données de référence (avatars) — idempotent.
+  execSync("npx tsx prisma/seed.ts", {
+    stdio: "inherit",
+    env: { ...process.env, DATABASE_URL: testUrl },
+  });
+
+  console.log("\n✅ Base de test prête (migrations + seed appliqués).");
 }
 
 main().catch((error) => {

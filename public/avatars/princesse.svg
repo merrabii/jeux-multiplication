@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Princesse">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff1f2"/><stop offset="1" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <circle cx="48" cy="48" r="46" fill="url(#bg)"/>
+  <circle cx="20" cy="22" r="1.8" fill="#fcd34d" opacity=".8"/><circle cx="76" cy="24" r="1.5" fill="#fcd34d" opacity=".7"/><circle cx="72" cy="76" r="1.8" fill="#fcd34d" opacity=".6"/>
+  <!-- couronne -->
+  <path d="M36 26l4 6 8-8 8 8 4-6 2 10H34z" fill="#fbbf24" stroke="#d97706" stroke-width="1.2" stroke-linejoin="round"/>
+  <circle cx="48" cy="20" r="2" fill="#f87171"/>
+  <!-- chevelure -->
+  <path d="M30 46c0-12 8-18 18-18s18 6 18 18v14c0 4-4 6-6 4V46c0-6-5-10-12-10s-12 4-12 10v18c-2 2-6 0-6-4z" fill="#b45309"/>
+  <!-- visage -->
+  <ellipse cx="48" cy="52" rx="15" ry="14" fill="#ffe4e6"/>
+  <!-- yeux -->
+  <circle cx="42" cy="51" r="2.8" fill="#452b12"/><circle cx="42" cy="50" r="1" fill="#fff"/>
+  <circle cx="54" cy="51" r="2.8" fill="#452b12"/><circle cx="54" cy="50" r="1" fill="#fff"/>
+  <!-- joues -->
+  <circle cx="38" cy="57" r="2.6" fill="#fda4af" opacity=".8"/><circle cx="58" cy="57" r="2.6" fill="#fda4af" opacity=".8"/>
+  <!-- sourire -->
+  <path d="M44 60q4 3 8 0" fill="none" stroke="#452b12" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- robe -->
+  <path d="M34 92c0-12 6-18 14-18s14 6 14 18z" fill="#f472b6"/>
+  <path d="M40 92c0-7 4-11 8-11s8 4 8 11z" fill="#fbcfe8"/>
+</svg>

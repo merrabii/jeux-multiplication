@@ -94,6 +94,10 @@ model ChildProfile {
   avatar      Avatar?      @relation(fields: [avatarId], references: [id])
   level       Int          @default(1)
   totalStars  Int          @default(0)
+  /// Monnaies de gamification (attribuées UNIQUEMENT côté serveur).
+  coins       Int          @default(0)
+  diamonds    Int          @default(0)
+  xp          Int          @default(0)
   /// Objectif quotidien en questions réussies.
   dailyGoal   Int          @default(20)
   /// Suppression logique (confirmation parentale côté application).
@@ -101,7 +105,13 @@ model ChildProfile {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  settings    GameSettings?
+  settings        GameSettings?
+  sessions        LearningSession[]
+  questionAttempts QuestionAttempt[]
+  progresses      ChildProgress[]
+  masteries       MultiplicationMastery[]
+  badges          ChildBadge[]
+  dailyActivities DailyActivity[]
 
   @@index([userId])
   @@map("child_profiles")
@@ -126,4 +136,128 @@ model GameSettings {
   updatedAt          DateTime @updatedAt
 
   @@map("game_settings")
+}
+
+/// Session de jeu (leçon, entraînement ou défi). Les questions et les
+/// récompenses sont validées côté serveur : le navigateur ne soumet
+/// jamais un score.
+model LearningSession {
+  id              String    @id @default(uuid())
+  childProfileId  String
+  childProfile    ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  /// LESSON | PRACTICE | CHALLENGE
+  kind            String
+  /// Tables travaillées dans cette session (1..10).
+  tableList       Int[]
+  /// EASY | NORMAL | HARD
+  difficulty      String
+  questionCount   Int
+  correctCount    Int       @default(0)
+  wrongCount      Int       @default(0)
+  durationSeconds Int       @default(0)
+  /// Défi : seuil de réussite (ex. 80 %). Null pour les autres modes.
+  targetPercent   Int?
+  /// Récompenses attribuées à la complétion (calculées serveur).
+  starsEarned     Int       @default(0)
+  xpEarned        Int       @default(0)
+  coinsEarned     Int       @default(0)
+  /// Complétion idempotente : une seule écriture de récompenses.
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+
+  attempts        QuestionAttempt[]
+
+  @@index([childProfileId, createdAt])
+  @@map("learning_sessions")
+}
+
+/// Une question posée dans une session et la réponse de l'enfant.
+/// La réponse attendue n'est JAMAIS envoyée au navigateur avant la
+/// validation ; elle est enregistrée ici par le serveur.
+model QuestionAttempt {
+  id             String    @id @default(uuid())
+  sessionId      String
+  session        LearningSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  childProfileId String
+  childProfile   ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  a              Int
+  b              Int
+  /// Choix affichés au joueur (QCM), dans l'ordre d'affichage.
+  offeredChoices Int[]
+  /// Réponse donnée (null si question sans réponse).
+  givenAnswer    Int?
+  isCorrect      Boolean
+  answeredAt     DateTime  @default(now())
+
+  @@index([childProfileId, a, b])
+  @@index([sessionId])
+  @@map("question_attempts")
+}
+
+/// Progression agrégée par table pour un enfant.
+model ChildProgress {
+  id               String    @id @default(uuid())
+  childProfileId   String
+  childProfile     ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  /// Table de multiplication (1..10).
+  table            Int
+  /// Nombre de leçons validées pour cette table (0 ou 1 en pratique).
+  lessonsCompleted Int       @default(0)
+  practiceSessions Int       @default(0)
+  challengesPassed Int       @default(0)
+  correctCount     Int       @default(0)
+  wrongCount       Int       @default(0)
+  lastPracticedAt  DateTime?
+  updatedAt        DateTime  @updatedAt
+
+  @@unique([childProfileId, table])
+  @@map("child_progress")
+}
+
+/// Maîtrise fine par multiplication (a×b), alimente la révision espacée.
+model MultiplicationMastery {
+  id             String    @id @default(uuid())
+  childProfileId String
+  childProfile   ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  a              Int
+  b              Int
+  correctCount   Int       @default(0)
+  wrongCount     Int       @default(0)
+  /// 0 = jamais vue, 1 = fragile, 2 = en cours, 3 = maîtrisée.
+  masteryLevel   Int       @default(0)
+  /// Prochaine révision conseillée (révision espacée).
+  nextReviewAt   DateTime?
+  lastReviewedAt DateTime?
+
+  @@unique([childProfileId, a, b])
+  @@map("multiplication_mastery")
+}
+
+/// Badge gagné par un enfant (clé = définition dans features/rewards).
+model ChildBadge {
+  id             String   @id @default(uuid())
+  childProfileId String
+  childProfile   ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  badgeKey       String
+  earnedAt       DateTime @default(now())
+
+  @@unique([childProfileId, badgeKey])
+  @@map("child_badges")
+}
+
+/// Activité agrégée par jour (tableau de bord + missions quotidiennes).
+model DailyActivity {
+  id               String   @id @default(uuid())
+  childProfileId   String
+  childProfile     ChildProfile @relation(fields: [childProfileId], references: [id], onDelete: Cascade)
+  /// Jour (UTC, minuit) — agrégat quotidien.
+  day              DateTime
+  questionsAnswered Int     @default(0)
+  correctAnswers   Int      @default(0)
+  starsEarned      Int      @default(0)
+  xpEarned         Int      @default(0)
+  sessionCount     Int      @default(0)
+
+  @@unique([childProfileId, day])
+  @@map("daily_activity")
 }
