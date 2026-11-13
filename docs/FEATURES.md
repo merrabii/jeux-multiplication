@@ -16,7 +16,7 @@ Statuts : `PLANNED` → `IN_PROGRESS` → `IMPLEMENTED` → `TESTED` → `DEPLOY
 | Métadonnées pédagogiques des 10 tables | TESTED | 4 tests Vitest |
 | Validation Zod (API + pseudonyme enfant) | TESTED | 5 tests Vitest |
 | Vérification persistance PostgreSQL (`npm run db:check`) | TESTED | Insertion transactionnelle, relecture, suppression en cascade |
-| Image Docker multi-stage + compose (db + app + healthchecks) | IMPLEMENTED | Image non encore construite ; build prévu en Phase 2 |
+| Image Docker multi-stage + compose (db + app + healthchecks) | TESTED | `docker build` réussi (160 Mo) ; conteneur de fumée exécuté : `/api/health` → `{"status":"ok","database":"connected"}`, `/` 200, `/parent` sans session → 307 connexion |
 | Documentation complète | TESTED | docs/ à jour (17 fichiers) |
 
 ## Phase 2 — MVP pédagogique
@@ -37,35 +37,53 @@ Statuts : `PLANNED` → `IN_PROGRESS` → `IMPLEMENTED` → `TESTED` → `DEPLOY
 | Traçabilité du consentement (termsAcceptedAt, termsVersion) | TESTED | Test d'intégration (colonnes renseignées à l'inscription) |
 | Base de test PostgreSQL isolée + `npm run db:test:setup` | TESTED | Provisionnement réel : 2 migrations appliquées sur `jeux_multiplication_test` |
 
-### Étapes 2.2 à 2.5 (à venir)
+### Étapes 2.2 à 2.5 — profils, noyau de jeu, gamification (réalisées)
 
-| Fonctionnalité | Statut |
-|---|---|
-| Gestion des profils enfants (API + autorisation parent) | PLANNED |
-| Sélection d'un profil enfant + avatars (seed) | PLANNED |
-| Tableau de bord enfant | PLANNED |
-| Apprentissage des tables 1..10 (progressif, visuel) | PLANNED |
-| Mode entraînement (sans chronomètre, indices) | PLANNED |
-| Mode défi (5/10/20 questions) | PLANNED |
-| Enregistrement des réponses + progression persistante | PLANNED |
-| Tests E2E Playwright des parcours réels | PLANNED (Phase 6) |
+| Fonctionnalité | Statut | Preuve |
+|---|---|---|
+| CRUD profils enfants (création ≤ 6/parent, mise à jour, suppression **logique**) | TESTED | Tests d'intégration + E2E navigateur (création « PerleE2E ») |
+| Appartenance parent/enfant revérifiée à chaque requête | TESTED | Tests : enfant d'un autre parent → `not_found` (profils, stats, jeu) |
+| Sélection d'avatar (8 avatars SVG locaux `public/avatars/`) | TESTED | E2E : `naturalWidth > 0` sur l'avatar affiché ; seed idempotent 8 avatars |
+| Cookie enfant `rmm_child` (httpOnly, Lax, 90 j) + garde `requireChildContext` | TESTED | E2E : `/enfant` sans cookie → redirection connexion/parent |
+| API de jeu `/api/game/{start,answer,complete}` | TESTED | Tests d'intégration + E2E (leçon 8 questions + défi 5 questions via navigateur) |
+| Réponse attendue jamais envoyée au client ; `isCorrect` recalculée serveur (a×b) | TESTED | Tests d'intégration (`features/game`) ; inspecté dans le code + payload réseau |
+| Complétion de session **idempotente** (aucune double récompense) | TESTED | Tests d'intégration (double complete → récompense unique) |
+| Récompenses côté serveur (règles dans `features/rewards/rules.ts`) | TESTED | Tests unitaires + d'intégration ; E2E : +15 ⭐ leçon parfaite, +15 ⭐ +75 XP défi parfait |
+| Apprentissage des tables (leçon visuelle : addition répétée + groupes) | TESTED | E2E : page leçon affiche « Comprendre : multiplier, c'est ajouter des groupes » |
+| Entraînement libre + suggestions de révision (répétition espacée) | TESTED | E2E : 10 questions d'entraînement jouées dans le navigateur (9 bonnes + 1 erreur autorisée, bilan 90 %, +4 ⭐/+90 XP serveur) ; moteur de maîtrise testé en intégration ; les suggestions « À revoir en priorité » s'affichent dès qu'une révision est due |
+| Défis 5/10/20 questions avec seuil de réussite | TESTED | E2E : défi 5 questions parfait terminé dans le navigateur |
+| Récompenses enfant (étoiles, niveau, badges, maîtrise fine) | TESTED | E2E : badge « Défi parfait » et « Multiplications maîtrisées (n) » affichés après rechargement |
+| Mondes magiques débloqués par leçons validées (`features/worlds/worlds.ts`) | TESTED | E2E : mondes verrouillés affichés avec la table manquante ; illustration SVG chargée |
+| Tableau de bord enfant (mission du jour, progression, raccourcis) | TESTED | E2E : « Mission du jour » + avatar + pseudonyme |
+| Espace parent : panneau statistiques par enfant (sessions, réussite, tables maîtrisées/à réviser, badges, 7 derniers jours) | TESTED | Tests d'intégration (agrégats + refus inter-parents) + E2E (« Sessions : 2 », « Tables maîtrisées : ») |
 
 ## Phase 3 — Gamification
 
-Étoiles, pièces, badges, trophées, avatars, niveaux, récompenses côté
-serveur (transactions PostgreSQL), mondes magiques, missions — PLANNED.
+Étoiles, pièces, XP, niveaux, badges : **TESTED** (voir §2.5 ci-dessus,
+table `child_badges`, idempotence upsert). Trophées, boutique d'avatars,
+missions longues — PLANNED.
 
 ## Phase 4 — Espace parent
 
-Tableau de bord parent, statistiques, historique, paramètres, gestion des
-profils — PLANNED.
+Tableau de bord parent + gestion des profils + **statistiques
+pédagogiques réelles** : TESTED. Historique détaillé, paramètres
+(sound/timer via `game_settings`), export — PLANNED.
 
 ## Phase 5 — Intelligence pédagogique
 
-Répétition espacée documentée et testée, détection des difficultés,
-adaptation de la difficulté, recommandations de révision — PLANNED.
+Répétition espacée documentée et testée (`features/spaced-repetition`,
+`multiplication_mastery`), détection des tables fragiles (< 70 %) dans
+les stats parent : TESTED. Adaptation automatique de la difficulté,
+recommandations avancées — PLANNED.
 
 ## Phase 6 — Optimisation et stabilisation
 
-Performance, accessibilité, responsive complet, E2E, sauvegardes/restauration,
-vérification du déploiement Coolify — PLANNED.
+- **E2E Playwright réels (Chromium)** : TESTED — parcours complet
+  (inscription → profil → leçon → défi → récompenses → stats parent) +
+  persistance après **redémarrage du serveur** + test de sécurité. Les
+  tests tournent contre un **build de production** (port 3100, base de
+  test isolée) — `scripts/e2e-server.ts`.
+- Responsive mobile/tablette : TESTED (E2E 375×812 et 768×1024).
+- Audit d'accessibilité automatisé, sauvegardes/restauration,
+  vérification du déploiement Coolify — PLANNED (accès Coolify
+  indisponible).

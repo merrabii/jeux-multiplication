@@ -5,7 +5,9 @@ multiplication de 1 à 10, destinée aux enfants de 7 à 8 ans. Univers magique
 (licornes, fées, dragons, châteaux), progression persistante, espace parent,
 déploiement Docker/Coolify.
 
-> **État actuel : Phase 1 (Fondations techniques) terminée.**
+> **État actuel : v0.3.0 — jeu jouable de bout en bout** (auth parent,
+> profils enfants, leçons/entraînement/défis, récompenses serveur, mondes
+> magiques, stats parent, E2E Chromium).
 > Détails dans [docs/CURRENT_STATE.md](docs/CURRENT_STATE.md).
 
 ## Démarrage rapide (développement)
@@ -23,11 +25,36 @@ Vérifications :
 
 ```bash
 npm run db:test:setup      # provisionne la base de test isolée (1re fois)
-npm test                   # tests unitaires + intégration (48 tests)
+npm test                   # tests unitaires + intégration (67 tests)
 npm run db:check           # vérifie la persistance PostgreSQL de bout en bout
 npm run build              # build de production
 npm run start              # démarre le serveur standalone (.next/standalone)
 ```
+
+## Le jeu (v0.3.0)
+
+- **Espace parent** : inscription/connexion, création des profils enfants
+  (pseudonyme + avatar), statistiques pédagogiques PostgreSQL (réussite
+  par table, tables à réviser, badges, 7 derniers jours).
+- **Espace enfant** : `/enfant` — tableau de bord (mission du jour,
+  mondes magiques débloqués par leçons validées), `/enfant/apprendre/[n]`
+  (leçon visuelle : addition répétée + 8 questions), `/enfant/entrainement`
+  (libre, suggestions de révision), `/enfant/defis` (5/10/20 questions),
+  `/enfant/recompenses` (étoiles, badges, maîtrise fine).
+- **Serveur seul juge** : la réponse attendue ne quitte jamais le
+  serveur, la complétion de session est idempotente (aucune double
+  récompense), récompenses documentées dans
+  `features/rewards/rules.ts`.
+
+## E2E (Playwright, Chromium)
+
+```bash
+npx tsx scripts/e2e-server.ts   # build production + serveur port 3100 (base de test)
+npx playwright test             # parcours complet + persistance après redémarrage
+```
+
+⚠️ Ne jamais exécuter `npm test` et `npx playwright test` simultanément
+(même base de test — voir docs/TESTING.md).
 
 ## Authentification parent (Phase 2.1)
 
@@ -51,7 +78,7 @@ npm run start              # démarre le serveur standalone (.next/standalone)
 | Base de données | PostgreSQL 18 |
 | ORM | Prisma ORM 7 (adapter `@prisma/adapter-pg`) |
 | Validation | Zod |
-| Tests | Vitest (Playwright en Phase 6) |
+| Tests | Vitest (67) + Playwright Chromium (E2E) |
 | Conteneurisation | Docker multi-stage, `output: standalone` |
 | Hébergement | Coolify |
 

@@ -22,7 +22,7 @@ PostgreSQL est la source de vérité de toutes les données persistantes.
   (`prisma/migrations`), jamais modifiée après application.
 - Migrations de production **non destructives par défaut**.
 
-## Modèles (Phase 1 + 2.1)
+## Modèles (Phase 1 + 2.1 + noyau de jeu)
 
 Migration `20261112142545_init_foundation` : `users`, `child_profiles`,
 `avatars`, `game_settings`.
@@ -30,6 +30,11 @@ Migration `20261112142545_init_foundation` : `users`, `child_profiles`,
 Migration `20261112172058_add_auth_foundation` : `sessions`,
 `login_attempts`, colonnes de consentement sur `users`, index unique
 `LOWER(email)`.
+
+Migration `20261112214817_add_game_core` : colonnes `coins`, `diamonds`,
+`xp` sur `child_profiles` ; tables `learning_sessions`,
+`question_attempts`, `child_progress`, `multiplication_mastery`,
+`child_badges`, `daily_activity`. **Non destructive.**
 
 ### users
 Compte parent (responsable légal).
@@ -78,6 +83,7 @@ Profil enfant. Minimisation des données : pseudonyme uniquement.
 | pseudonym | TEXT | validé côté serveur (2–20 car., sans données personnelles) |
 | avatarId | TEXT nullable | FK → avatars |
 | level / totalStars / dailyGoal | INTEGER | défauts 1 / 0 / 20 |
+| coins / diamonds / xp | INTEGER | récompenses agrégées (défauts 0), mises à jour uniquement côté serveur |
 | deletedAt | TIMESTAMP nullable | suppression logique (Phase 4) |
 | createdAt / updatedAt | TIMESTAMP(3) | |
 
@@ -104,6 +110,87 @@ parent** (Phase 4).
 | advisedSessionMin | INTEGER | défaut 20 |
 | createdAt / updatedAt | TIMESTAMP(3) | |
 
+### learning_sessions
+Une session de jeu (LESSON, PRACTICE ou CHALLENGE). La complétion est
+**idempotente** : `updateMany WHERE completedAt IS NULL` (aucune double
+récompense possible, même en double-clic ou double requête).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| childProfileId | TEXT | FK → child_profiles, ON DELETE CASCADE, index (childProfileId, createdAt) |
+| kind | TEXT | `LESSON` \| `PRACTICE` \| `CHALLENGE` |
+| tableList | INTEGER[] | tables concernées |
+| difficulty | TEXT | `EASY` \| `NORMAL` \| `HARD` |
+| questionCount | INTEGER | taille prévue |
+| correctCount / wrongCount | INTEGER | remplis côté serveur à la complétion |
+| durationSeconds | INTEGER | durée déclarée, bornée |
+| targetPercent | INTEGER nullable | seuil de réussite du défi |
+| starsEarned / xpEarned / coinsEarned | INTEGER | récompenses calculées **côté serveur** à la complétion |
+| completedAt | TIMESTAMP nullable | NULL = session en cours |
+| createdAt | TIMESTAMP(3) | |
+
+### question_attempts
+Chaque réponse individuelle. **La réponse attendue n'est jamais stockée
+côté client** : `isCorrect` est recalculée côté serveur (a×b).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| sessionId | TEXT | FK → learning_sessions, ON DELETE CASCADE, index |
+| childProfileId | TEXT | FK → child_profiles, ON DELETE CASCADE, index (childProfileId, a, b) |
+| a / b | INTEGER | facteurs de la question |
+| offeredChoices | INTEGER[] | 4 choix proposés (audit pédagogique) |
+| givenAnswer | INTEGER nullable | réponse de l'enfant (NULL = non répondu) |
+| isCorrect | BOOLEAN | recalculé serveur : givenAnswer === a×b |
+| answeredAt | TIMESTAMP(3) | |
+
+### child_progress
+Agrégat par table et par profil (UNIQUE childProfileId+table).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| childProfileId | TEXT | FK cascade, UNIQUE avec table |
+| table | INTEGER | 1..10 |
+| lessonsCompleted / practiceSessions / challengesPassed | INTEGER | compteurs |
+| correctCount / wrongCount | INTEGER | base des statistiques parentales |
+| lastPracticedAt | TIMESTAMP nullable | |
+| updatedAt | TIMESTAMP(3) | |
+
+### multiplication_mastery
+Maîtrise fine par multiplication (a, b) — répétition espacée.
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| childProfileId | TEXT | FK cascade, UNIQUE avec (a, b) |
+| a / b | INTEGER | facteurs |
+| correctCount / wrongCount | INTEGER | |
+| masteryLevel | INTEGER | 0–3 (intervals de révision 1 h / 24 h / 72 h ; une erreur retombe au niveau 1) |
+| nextReviewAt / lastReviewedAt | TIMESTAMP nullable | source des suggestions de révision |
+
+### child_badges
+Badges débloqués (UNIQUE childProfileId+badgeKey, upsert idempotent).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| childProfileId | TEXT | FK cascade, UNIQUE avec badgeKey |
+| badgeKey | TEXT | ex. `first_session`, `perfect_challenge` |
+| earnedAt | TIMESTAMP(3) | |
+
+### daily_activity
+Agrégat journalier par profil (UNIQUE childProfileId+day, upsert).
+Alimente « Mission du jour » et l'activité récente de l'espace parent.
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT (uuid) | PK |
+| childProfileId | TEXT | FK cascade, UNIQUE avec day |
+| day | TIMESTAMP(3) | jour UTC tronqué |
+| questionsAnswered / correctAnswers / starsEarned / xpEarned / sessionCount | INTEGER | compteurs |
+
 ## Relations
 
 ```
@@ -111,7 +198,14 @@ users 1 ──< child_profiles (cascade)
 users 1 ──< sessions (cascade)
 users 1 ──< login_attempts (SetNull)
 child_profiles 1 ──1 game_settings (cascade)
+child_profiles 1 ──< learning_sessions (cascade)
+child_profiles 1 ──< question_attempts (cascade)
+child_profiles 1 ──< child_progress (cascade, unique par table)
+child_profiles 1 ──< multiplication_mastery (cascade, unique par a,b)
+child_profiles 1 ──< child_badges (cascade, unique par badgeKey)
+child_profiles 1 ──< daily_activity (cascade, unique par jour)
 avatars 1 ──< child_profiles (nullable, pas de cascade)
+learning_sessions 1 ──< question_attempts (cascade)
 ```
 
 ## ERD (texte)
@@ -121,6 +215,11 @@ avatars 1 ──< child_profiles (nullable, pas de cascade)
 |  users   |1──────*| child_profiles  |1──────1| game_settings  |
 +----------+ userId |                 | profId +----------------+
                      | avatarId *───1 | avatars
+                     |  ├──* learning_sessions ──* question_attempts
+                     |  ├──* child_progress
+                     |  ├──* multiplication_mastery
+                     |  ├──* child_badges
+                     |  └──* daily_activity
 ```
 
 ## Commandes

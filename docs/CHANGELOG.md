@@ -2,6 +2,72 @@
 
 Format : date — version — modifications — fichiers — migrations — tests — impact.
 
+## 2026-11-12 — v0.3.0 (noyau de jeu, gamification, espace parent, E2E réels)
+
+### Ajouté
+- **Noyau de jeu côté serveur** (`features/game/service.ts`) :
+  `startGameSession`, `submitAnswer`, `completeGameSession`. La réponse
+  attendue (a×b) n'est jamais envoyée au client ; `isCorrect` est
+  recalculée côté serveur ; la complétion est **idempotente**
+  (`updateMany WHERE completedAt IS NULL` — aucun double crédit).
+- **API de jeu** : `POST /api/game/start`, `/api/game/answer`,
+  `/api/game/complete` (gardes session + cookie enfant, Zod, 401/400/404).
+- **Récompenses** (`features/rewards/rules.ts`) : étoiles, XP, pièces,
+  gemmes, niveaux, badges (`first_session`, `perfect_challenge`, …) —
+  upserts idempotents ; calcul **uniquement côté serveur**.
+- **Répétition espacée** (`features/spaced-repetition/schedule.ts` +
+  table `multiplication_mastery`) : maîtrise 0–3, révisions 1 h / 24 h /
+  72 h, erreur → niveau 1.
+- **Mondes magiques** (`features/worlds/worlds.ts`) : 5 mondes, déblocage
+  par leçons validées ; illustrations **SVG locales** (`public/images/
+  worlds/`) + 8 avatars SVG (`public/avatars/`) — zéro dépendance externe.
+- **Interface enfant** : en-tête partagé, tableau de bord (mission du
+  jour, mondes, raccourcis), pages d'apprentissage (leçon visuelle avec
+  addition répétée), entraînement (suggestions de révision), défis
+  5/10/20, page récompenses (badges + maîtrise fine).
+- **Espace parent** : panneau de statistiques pédagogiques par enfant
+  (`features/children/stats.ts`) — sessions, taux de réussite global et
+  par table, tables maîtrisées, tables à réviser (< 70 %), badges,
+  activité des 7 derniers jours ; agrégats PostgreSQL, appartenance
+  revérifiée.
+- **E2E Playwright réels (Chromium)** :
+  - `tests/e2e/journey.spec.ts` — parcours complet : inscription parent →
+    création profil + avatar → dashboard → leçon table 2 (8 questions
+    réussies dans le navigateur) → défi 5 questions parfait (+15 ⭐,
+    +75 XP) → **entraînement libre table 3 (10 questions, 9 bonnes +
+    1 erreur volontaire : +4 ⭐, +90 XP)** → étoiles persistées →
+    stats parent → responsive 375×812.
+  - `tests/e2e/persistence.spec.ts` — vérification **après redémarrage
+    réel du serveur** : cookies, étoiles (≥ 30), leçon validée
+    (« Validée ✓ »), stats parent intactes ; + test de sécurité
+    (contexte sans cookies → redirection).
+  - `scripts/e2e-server.ts` : serveur E2E sur **build de production**
+    standalone (port 3100) contre la base de test isolée — l'environnement
+    dev (HMR Turbopack) annulait aléatoirement des navigations.
+  - `playwright.config.ts` ; artefacts hors image Docker (`.dockerignore`).
+
+### Migration
+`20261112214817_add_game_core` — colonnes `coins`/`diamonds`/`xp` sur
+`child_profiles` ; tables `learning_sessions`, `question_attempts`,
+`child_progress`, `multiplication_mastery`, `child_badges`,
+`daily_activity` (cascade + index/unique). **Non destructive.**
+
+### Tests exécutés (réels)
+- `npm test` → **67/67** (unitaires + intégration sur
+  `jeux_multiplication_test`, incluant idempotence, isolation
+  inter-parents, règles de récompense, répétition espacée, stats).
+- `npm run lint` → 0 erreur ; `npm run build` → 15 routes.
+- E2E Chromium : parcours complet **PASSED** ; persistance après
+  redémarrage serveur **PASSED (2/2)** ; données vérifiées aussi en SQL
+  direct (`child_progress` table 2 : lessonsCompleted=1, correct=8).
+
+### Impact
+Aucune donnée supprimée ; migrations non destructives ; anciens tests
+conservés. **Règle d'exploitation : ne jamais exécuter `npm test`
+concurrently avec les E2E** (les deux purgent/écrivent la même base de
+test ; le nettoyage Vitest des comptes `@auth-test.example` invalide les
+sessions E2E en cours).
+
 ## 2026-11-12 — v0.2.0-phase2.1 (authentification parent)
 
 ### Ajouté
