@@ -80,10 +80,31 @@ recommandations avancées — PLANNED.
 
 - **E2E Playwright réels (Chromium)** : TESTED — parcours complet
   (inscription → profil → leçon → défi → récompenses → stats parent) +
-  persistance après **redémarrage du serveur** + test de sécurité. Les
-  tests tournent contre un **build de production** (port 3100, base de
-  test isolée) — `scripts/e2e-server.ts`.
+  persistance après **redémarrage du serveur** + test de sécurité + **parcours
+  d'installation complet**. Les tests tournent contre un **build de
+  production** (port 3100, base de test isolée) — `scripts/e2e-server.ts`.
 - Responsive mobile/tablette : TESTED (E2E 375×812 et 768×1024).
 - Audit d'accessibilité automatisé, sauvegardes/restauration,
   vérification du déploiement Coolify — PLANNED (accès Coolify
   indisponible).
+
+## Phase 7 — Application installable (v0.4.0)
+
+| Fonctionnalité | Statut | Preuve |
+|---|---|---|
+| Assistant d'installation web (`/installation`, 6 étapes) | TESTED | E2E navigateur : redirection depuis `/`, vérifications d'environnement, configuration, base, initialisation réelle, création admin, page de réussite (spec `installation.spec.ts`) |
+| Vérification d'environnement réelle (Node, DB, migrations, tables, permissions, avatars, stockage) | TESTED | Étape 1 affichée dans le navigateur ; contrôles exécutés côté serveur (`features/installer/environment.ts`) |
+| Configuration applicative persistée (`app_config`) | TESTED | Test d'intégration (sauvegarde + relecture + valeurs par défaut) |
+| Base PostgreSQL externe + « Tester la connexion » | IMPLEMENTED | Diagnostic serveur réel (code d'erreur PostgreSQL interprété) ; création de base si droit CREATEDB ; aucun secret stocké/affiché |
+| Initialisation réelle (migrations `migrate deploy`, tables, seed avatars) | TESTED | E2E : étapes « Vérification de la connexion », « Migrations appliquées », « avatars disponibles » affichées |
+| Premier administrateur (rôle `admin`, bcrypt, atomique) | TESTED | E2E (connexion admin après création) + tests d'intégration (rôle, hachage, verrou, refus si admin existant, **atomicité 2 requêtes simultanées**) |
+| Verrouillage définitif de l'installateur | TESTED | E2E : après installation, `/installation` redirige vers `/parent/connexion` ; ligne `installation.status=completed` vérifiée en SQL |
+| Jeton d'installation (`INSTALL_TOKEN` / `.install_token`) | IMPLEMENTED | Comparaison à temps constant testée (unitaires) ; jeton généré et affiché dans les journaux du conteneur (Docker) |
+| Récupération administrateur sécurisée (`/recuperation-admin`) | IMPLEMENTED | Page + Server Action (jeton serveur, 3 tentatives/h, révocation des sessions) ; pas de parcours navigateur automatisé |
+| Anti-abus (5 échecs → blocage 15 min) | TESTED | Test d'intégration (compteur + `blockedUntil` + refus pendant le blocage) |
+| Mode hérité (base déjà utilisée → assistant jamais proposé) | TESTED | Test d'intégration : utilisateur existant → `isInstallationRequired=false` |
+| Entrypoint Docker (attente PostgreSQL, migrations, jeton) | TESTED | Image construite + conteneur de fumée : jeton dans les journaux, migrations appliquées, `/api/health` → `database: connected` |
+| Scripts VPS (`install-vps.sh`, `update-vps.sh`) | IMPLEMENTED | Syntaxe vérifiée (`bash -n`) ; non exécutés sur un VPS réel (KNOWN_ISSUES n°11) |
+| Coolify / Dokploy / Vercel / Netlify | IMPLEMENTED | Configurations et procédures écrites (`docs/INSTALLATION.md`, `netlify.toml`) — **non déployés** (KNOWN_ISSUES n°10) |
+| Pool de connexions serverless (`PGPOOL_MAX`) | IMPLEMENTED | `lib/database/client.ts` ; non testé sous charge serverless |
+| Sauvegarde / restauration PostgreSQL | TESTED | `npm run db:backup` puis `RESTORE_CONFIRM=1 npm run db:restore -- <fichier>` : suppression volontaire de 2 lignes puis restauration → données et verrou retrouvés, 4 migrations cohérentes (vérifié en SQL le 2026-11-14) |

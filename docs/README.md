@@ -10,6 +10,7 @@
 | [UI_DESIGN.md](UI_DESIGN.md) | Direction artistique, design system |
 | [API_REFERENCE.md](API_REFERENCE.md) | Endpoints HTTP |
 | [ENVIRONMENT.md](ENVIRONMENT.md) | Variables d'environnement |
+| [INSTALLATION.md](INSTALLATION.md) | **Guide d'installation complet** (assistant web, Docker, Coolify, Dokploy, VPS, Vercel, Netlify, sauvegarde, récupération admin) |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | Docker, Coolify, migrations, sauvegardes |
 | [SECURITY.md](SECURITY.md) | Sécurité et protection des enfants |
 | [TESTING.md](TESTING.md) | Stratégie de tests |

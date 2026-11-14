@@ -8,20 +8,49 @@ validation. Déployée en un seul conteneur applicatif + un service
 PostgreSQL (Docker/Coolify).
 
 ```
-Navigateur (enfant / parent)
+Navigateur (enfant / parent / installateur)
         │  HTTPS
         ▼
 Next.js 16 (App Router, Node 22, standalone)
 ├── app/            pages + Server Actions d'auth (contrôles minces)
+│   ├── installation/       assistant 6 étapes (verrouillage persistant)
+│   └── recuperation-admin/ récupération admin (jeton serveur)
 ├── features/       logique métier pure et testable
 │   ├── multiplication/   moteur de questions
+│   ├── installer/        statut, environnement, init, admin atomique
 │   └── auth/             inscription/connexion + limitation de tentatives
 ├── lib/            client Prisma, sessions, validation Zod, sécurité, guards
-└── components/     composants UI (parent/auth, puis child/game/rewards/ui)
+└── components/     composants UI (parent/auth, child/game, installer)
         │  adapter @prisma/adapter-pg
         ▼
 PostgreSQL 18 (service séparé, volume persistant, jamais exposé sur Internet)
 ```
+
+## Flux d'installation (v0.4.0)
+
+```
+GET /  ──► lib/auth/install-guard.ts ──► features/installer/status.ts
+              │                                  │  table `installation` (singleton)
+              │ non installé                    ▼
+              ▼                         InstallationState { pending | completed | legacy }
+        redirect(/installation)
+              │
+              ▼
+/installation (force-dynamic)
+   ├── Étape 1 : features/installer/environment.ts  (contrôles réels)
+   ├── Étape 2 : app_config (clé/valeur)
+   ├── Étape 3 : mode auto (DATABASE_URL) ou externe (test de connexion)
+   ├── Étape 4 : initializeDatabase() → prisma migrate deploy + tables + avatars
+   ├── Étape 5 : createFirstAdmin() → transaction + SELECT … FOR UPDATE
+   │              (bcrypt, rôle admin, verrou `completed` posé)
+   └── Étape 6 : succès → /parent/connexion
+```
+
+Le verrou est **persistant en base** : `installation.status=completed`
+ferme définitivement l'assistant. Un serveur déjà utilisé (comptes ou
+profils existants) bascule en mode « hérité » : l'assistant n'est jamais
+proposé. Le CLI de migration est embarqué dans `/app/prisma-cli` (image
+Docker) ; en local il provient de `node_modules/prisma`.
 
 ## Flux d'authentification parent (Phase 2.1)
 
@@ -77,6 +106,7 @@ déconnexion écrit `revokedAt`, ce qui rend tout jeton copié inutilisable.
 
 ## Liens
 
+- Installation et déploiements : [INSTALLATION.md](INSTALLATION.md)
 - Schéma et conventions base : [DATABASE.md](DATABASE.md)
 - Sécurité : [SECURITY.md](SECURITY.md)
 - Déploiement : [DEPLOYMENT.md](DEPLOYMENT.md)

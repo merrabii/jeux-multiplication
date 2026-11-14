@@ -15,10 +15,17 @@ npm run db:test:setup   # provisionne la base de test isolée (migrations + seed
 npm test                # tous les tests Vitest (unitaires + intégration)
 npm run test:watch      # mode watch
 npm run db:check        # intégration : persistance PostgreSQL de bout en bout
+npm run db:backup       # sauvegarde PostgreSQL → backups/backup-<date>.sql
+npm run db:restore -- backups/backup-<date>.sql   # restauration (RESTORE_CONFIRM=1)
 npm run build           # vérifie la compilation TypeScript complète
 npx tsx scripts/e2e-server.ts   # serveur E2E (build prod, port 3100) — Ctrl+C pour arrêter
 npx playwright test             # suite E2E (le serveur doit être démarré)
 ```
+
+Variables d'environnement utiles pour les E2E : `E2E_BASE_URL`
+(serveur ciblé, défaut `http://localhost:3100`), `INSTALL_TOKEN`
+(déclenche l'étape « jeton d'installation » dans le parcours),
+`TEST_DATABASE_URL` (base purgée par le spec d'installation).
 
 **⚠️ Règle d'exploitation : ne jamais exécuter `npm test` (Vitest) et
 `npx playwright test` en même temps.** Les deux utilisent la même base
@@ -28,12 +35,13 @@ cours de session (échec observé le 2026-11-12).
 
 Les tests d'intégration utilisent **exclusivement** `TEST_DATABASE_URL`
 (base `jeux_multiplication_test`) — jamais la base de développement ni la
-production. Leurs données portent le domaine `@auth-test.example` et sont
-purgées avant et après exécution.
+production. Leurs données portent le domaine `@auth-test.example`
+(`@installer-test.example` pour l'installateur, non purgé par les autres
+fichiers) et sont purgées avant et après exécution.
 
-## Couverture réelle (67 tests Vitest, tous passés le 2026-11-12)
+## Couverture réelle (90 tests Vitest, tous passés le 2026-11-13)
 
-### Unitaires (28)
+### Unitaires (28 + 11 = 39)
 - `tests/unit/features/multiplication/engine.test.ts` (10) : génération des
   questions, déterminisme par graine, restriction aux tables demandées,
   QCM contient toujours la bonne réponse (4 choix uniques), difficulté
@@ -45,8 +53,16 @@ purgées avant et après exécution.
   salage unique, vérification valide, rejet incorrect, comparaison factice.
 - `tests/unit/lib/auth/session-token.test.ts` (5) : JWT valide, expiré,
   falsifié, forgé avec autre clé, charge utile incomplète.
+- `tests/unit/features/installer/token.test.ts` (5) : jeton d'installation
+  (exigence, comparaison exacte, trim, longueurs différentes rejetées sans
+  exception), jeton de récupération (désactivé sans variable, comparaison
+  à temps constant).
+- `tests/unit/features/installer/schemas.test.ts` (11) : Zod de l'assistant
+  — configuration (nom trop court, URL mal formée vs vide), base externe
+  (port hors bornes, sslMode inconnu), administrateur (confirmation,
+  longueur minimale, e-mail normalisé), jeton vide.
 
-### Intégration (39, sur `jeux_multiplication_test`)
+### Intégration (39 + 12 = 51, sur `jeux_multiplication_test`)
 - `tests/integration/features/auth/service.test.ts` (20) : les 18
   scénarios d'authentification exigés : inscription (réelle, doublon,
   doublon par casse, champs invalides, course concurrente P2002),
@@ -73,7 +89,22 @@ purgées avant et après exécution.
   plafonnés au niveau 3, intervalles croissants, calcul LESSON/PRACTICE/
   CHALLENGE).
 
+- `tests/integration/features/installer/installer.test.ts` (7) : scénarios
+  de la mission — statut sans ligne + cohérence du garde, mode hérité
+  (utilisateur existant → assistant jamais proposé), création du premier
+  administrateur (rôle admin, bcrypt, verrou `completed`, `adminUserId`),
+  refus quand un admin existe, anti-abus (5 échecs → blocage 15 min),
+  **atomicité de deux créations simultanées** (exactement un `created`,
+  un seul admin en base), configuration `app_config` sauvegardée/relue.
+
 ### E2E — Playwright Chromium (contre build de production, base de test)
+- `tests/e2e/installation.spec.ts` — **PASSED (3/3)** : purge SQL directe
+  (installation + utilisateurs) → `/` redirige vers `/installation` →
+  parcours complet des 6 étapes dans le navigateur (vérifications
+  d'environnement réelles, configuration, mode base automatique,
+  **initialisation réelle** (migrations + avatars), création du premier
+  administrateur) → page de réussite → connexion de l'administrateur
+  créé → **verrouillage** (`/installation` → redirection connexion).
 - `tests/e2e/journey.spec.ts` — **PASSED** : inscription parent → création
   profil enfant + avatar (SVG chargé, `naturalWidth > 0`) → dashboard →
   leçon table 2 (8 questions réussies via l'UI, validation serveur) →
@@ -88,16 +119,29 @@ purgées avant et après exécution.
   cookies → redirection vers l'espace parent.
 - Données revérifiées indépendamment en SQL direct (`psql` sur
   `jeux_multiplication_test`) : `child_progress` table 2 →
-  `lessonsCompleted=1`, `correctCount=8`.
+  `lessonsCompleted=1`, `correctCount=8` ; ligne `installation` →
+  `status=completed` après l'assistant, verrou actif.
+
+### Docker — installation neuve vérifiée
+- Image `jeux-multiplication:installer-check` (build avec entrypoint) ;
+  conteneur applicatif + conteneur PostgreSQL **jetables** dédiés au
+  test (le volume de dev n'est jamais touché) : entrypoint → attente
+  PostgreSQL → `prisma migrate deploy` → jeton d'installation imprimé
+  dans les journaux → `/` 307 vers `/installation` → assistant 200 →
+  `/api/health` `database: connected`.
 
 ### Vérifications système
 - `npm run db:check` : transaction (user + profil + settings), relecture,
   suppression en cascade — exécuté avec succès contre PostgreSQL 18.6.
+- Sauvegarde/restauration (2026-11-14) : `npm run db:backup` (pg_dump du
+  conteneur) puis suppression volontaire de 2 lignes (`app_config`,
+  `installation`) et `npm run db:restore -- <fichier>` → relecture SQL :
+  données et verrou retrouvés, 4 migrations appliquées cohérentes.
 - Protection des routes vérifiée par curl sur le serveur standalone :
   sans session → 307 `/parent/connexion` ; jeton valide → 200 ;
   jeton révoqué → 307.
 - `npm run db:test:setup` : création de `jeux_multiplication_test` +
-  application des 3 migrations + seed avatars (vérifié).
+  application des 4 migrations + seed avatars (vérifié).
 
 ## Conventions
 
@@ -112,6 +156,13 @@ purgées avant et après exécution.
   le 2026-11-12).
 
 ## Non exécuté (honnêteté)
+
+- Déploiements réels Coolify / Dokploy / Vercel / Netlify (aucun accès
+  disponible) : configurations prêtes et procédures écrites, statuts
+  « compatible par architecture », jamais « déployé ».
+- Déploiement VPS réel (aucun serveur disponible) : scripts
+  `install-vps.sh` / `update-vps.sh` vérifiés syntaxiquement
+  (`bash -n`) mais non exécutés sur une machine réelle.
 
 - E2E de la page de détail d'un monde (les mondes s'affichent
   verrouillés/débloqués sur le dashboard mais n'ont pas de page propre).

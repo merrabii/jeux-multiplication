@@ -2,6 +2,102 @@
 
 Format : date — version — modifications — fichiers — migrations — tests — impact.
 
+## 2026-11-13 — v0.4.0 (application installable : assistant d'installation web + multi-plateformes)
+
+### Ajouté
+- **Assistant d'installation web** (`/installation`, priorité de la
+  mission) : ouverture automatique au premier démarrage, 6 étapes en
+  français, responsive, univers magique —
+  1. vérification réelle de l'environnement (version app, Node.js,
+     DATABASE_URL sans valeur affichée, connexion PostgreSQL, migrations,
+     tables, permissions, données de référence, stockage) avec solutions
+     proposées ;
+  2. configuration application (nom, URL, langue, fuseau, organisation)
+     stockée dans la nouvelle table `app_config` ;
+  3. base de données automatique ou externe (hôte/port/base/utilisateur/
+     mot de passe/SSL) avec **« Tester la connexion »** réel et création
+     de base si l'utilisateur a le droit CREATEDB — aucun mot de passe
+     stocké, affiché ou journalisé ;
+  4. initialisation **réelle** étape par étape (migrations `prisma
+     migrate deploy` idempotentes, vérification des tables, seed avatars
+     upsert, enregistrement) — jamais destructif, erreurs explicites,
+     configuration corrigeable sans perte de données ;
+  5. premier administrateur (rôle `admin` du système d'authentification
+     existant, bcrypt, **création atomique** `SELECT FOR UPDATE` —
+     deux soumissions simultanées ne créent jamais deux admins,
+     vérification serveur qu'aucun admin n'existe, anti-abus 5 échecs →
+     15 min) ;
+  6. page de réussite + redirection connexion.
+- **Verrouillage définitif** : table `installation` (singleton) ;
+  après la création de l'admin, `completedAt` posé → l'assistant est
+  fermé (toute visite redirige vers la connexion) ; **mode hérité** :
+  base déjà utilisée (comptes/profils existants) → assistant jamais
+  proposé ; protection par **jeton d'installation**
+  (`INSTALL_TOKEN` ou `.install_token` généré par l'entrypoint Docker
+  et imprimé dans les journaux du conteneur uniquement).
+- **Garde d'installation** (`lib/auth/install-guard.ts`) branché sur
+  l'accueil et toutes les pages parent/enfant (routes API exclues).
+- **Récupération administrateur sécurisée** (`/recuperation-admin`) :
+  distincte de l'installation, exige `ADMIN_RECOVERY_TOKEN`
+  (comparaison à temps constant), réinitialisation bcrypt + révocation
+  de toutes les sessions, 3 tentatives/h ; désactivée sans variable.
+- **Déploiement multi-plateformes** :
+  - `docker/entrypoint.sh` — attente PostgreSQL, migrations
+    idempotentes au démarrage, génération du jeton d'installation
+    (Dockerfile : ENTRYPOINT, utilisateur non-root) ;
+  - `docker-compose.yml` — passthrough `INSTALL_TOKEN`/`AUTH_SECRET` ;
+  - `scripts/install-vps.sh` + `scripts/update-vps.sh` (Debian/Ubuntu,
+    secrets crypto-sûrs jamais écrasés, sauvegarde automatique avant
+    mise à jour, jamais de suppression de données) ;
+  - `netlify.toml` ; procédures Vercel/Netlify/Coolify/Dokploy dans
+    `docs/INSTALLATION.md` (nouveau document central).
+- **Serverless** : `PGPOOL_MAX` (limite du pool) dans
+  `lib/database/client.ts` ; migrations en étape de build documentée.
+- `features/avatars/seed.ts` extrait (réutilisé par le seed, l'E2E et
+  l'assistant) ; `lib/version.ts` (0.4.0).
+
+### Fichiers
+- Nouveaux : `features/installer/{status,environment,service,admin,
+  db-config,token,schemas}.ts`, `app/installation/{page,actions}.tsx`,
+  `app/recuperation-admin/{page,actions}.tsx`,
+  `components/installer/{InstallerWizard,RecoveryForm}.tsx`,
+  `lib/auth/install-guard.ts`, `lib/version.ts`,
+  `docker/entrypoint.sh`, `scripts/{install-vps,update-vps,
+  mark-installed}.sh|.ts`, `tests/unit/features/installer/*`,
+  `tests/integration/features/installer/installer.test.ts`,
+  `tests/e2e/installation.spec.ts`, `netlify.toml`, `.gitattributes`,
+  `docs/INSTALLATION.md`.
+- Modifiés : `prisma/schema.prisma`, `prisma/seed.ts`,
+  `lib/database/client.ts`, `lib/auth/{guards,child-guard}.ts`,
+  `app/page.tsx`, pages parent/enfant (`force-dynamic` — les pages à
+  garde ne doivent jamais prérendre : prérendu → requêtes PostgreSQL au
+  build, échec Docker observé puis corrigé), `Dockerfile`,
+  `docker-compose.yml`, `.env.example`, `package.json` (0.4.0),
+  documentation complète.
+
+### Migrations
+- `20261113011956_add_installation` — tables `app_config` et
+  `installation` (CREATE TABLE, **non destructif**) ; appliquée sur dev
+  et base de test via `prisma migrate dev` / `db:test:setup`.
+
+### Tests
+- Vitest **90/90** (67 existants + 12 installateur + rigidification du
+  test flaky `repeatedAddition` pour 1×b) ; lint 0 erreur ;
+  `npm run build` 17 routes.
+- E2E Playwright **6/6 PASSED** : installation complète (redirection,
+  6 étapes, verrouillage, connexion admin), parcours de jeu complet,
+  persistance après redémarrage, sécurité.
+- Docker : build OK, smoke test installation neuve (base jetable
+  dédiée) — entrypoint + assistant + healthcheck.
+
+### Impact
+- L'application devient installable de bout en bout depuis un
+  navigateur, avec verrouillage de l'installateur, sauvegarde/restauration
+  documentées et procédures par plateforme. Aucune régression : les
+  parcours de jeu existants sont inchangés (E2E 6/6).
+
+---
+
 ## 2026-11-12 — v0.3.0 (noyau de jeu, gamification, espace parent, E2E réels)
 
 ### Ajouté

@@ -17,6 +17,13 @@ Copier `.env.example` → `.env` (jamais committé).
 | `AUTH_ATTEMPT_RETENTION_HOURS` | Non (24) | `24` | Conservation puis purge des tentatives (heures). |
 | `NODE_ENV` | Non (défaut dev) | `production` | Active `Secure` sur le cookie de session en production. |
 | `HOSTNAME` / `PORT` | Non | `0.0.0.0` / `3000` | Server standalone Next.js (définis dans le Dockerfile). |
+| `INSTALL_TOKEN` | Non | jeton hexadécimal | Protège l'assistant `/installation` tant que l'application n'est pas installée. En Docker, **vide → le conteneur en génère un au démarrage** et l'imprime dans ses journaux (`docker compose logs app`). |
+| `INSTALL_TOKEN_FILE` | Non | `/app/.install_token` | Emplacement du fichier de jeton (Docker). |
+| `ADMIN_RECOVERY_TOKEN` | Non | jeton hexadécimal | Active `/recuperation-admin`. **Vide = mécanisme désactivé.** À retirer après usage. |
+| `PGPOOL_MAX` | Non | `3` | Limite du pool de connexions PostgreSQL (serverless Vercel/Netlify : 1–5 ; conteneur dédié : laisser vide). |
+| `POSTGRES_USER` / `POSTGRES_PASSWORD` / `POSTGRES_DB` | Compose | `jeux_user` / secret fort / `jeux_multiplication` | Création du service PostgreSQL par Compose. **Ne jamais commiter un mot de passe réel.** |
+| `DB_WAIT_LOOPS` | Non (30) | `30` | Nombre de tentatives d'attente PostgreSQL dans l'entrypoint Docker (30 × 4 s = 2 min). |
+| `MIGRATOR_ROOT` | Non | `/app/prisma-cli` | Dossier du CLI Prisma embarqué (image Docker). |
 
 Chargement :
 - **Next.js** charge `.env` automatiquement (dev et build).

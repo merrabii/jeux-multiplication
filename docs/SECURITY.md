@@ -50,6 +50,48 @@ minimisation sont des exigences de conception.
 - **Consentement** : `termsAcceptedAt` + `termsVersion` tracés à
   l'inscription.
 
+## Sécurité de l'assistant d'installation (v0.4.0)
+
+- **Verrou persistant en base** : table `installation` (singleton). Tant
+  que `completedAt` est vide, l'assistant est ouvert ; dès la création du
+  premier administrateur, il est **définitivement fermé** (toute visite
+  de `/installation` redirige vers la connexion). Aucun paramètre
+  d'URL ne permet de recréer un administrateur initial.
+- **Atomicité** : création de l'administrateur dans une transaction avec
+  `SELECT … FOR UPDATE` sur la ligne singleton — deux requêtes
+  simultanées ne peuvent créer **qu'un seul** administrateur initial
+  (test d'intégration : 1 `created`, 1 `already_installed`).
+- **Vérification serveur** : l'installation refuse de créer un
+  administrateur si un compte `role=admin` existe déjà.
+- **Jeton d'installation** (`INSTALL_TOKEN` ou fichier `.install_token`
+  généré par l'entrypoint Docker) : protège l'assistant avant la fin de
+  la procédure ; comparé à **temps constant** ; le jeton n'apparaît que
+  dans les journaux du conteneur (côté serveur). Cookie de déblocage
+  httpOnly signé (24 h).
+- **Anti-abus** : les échecs de création d'administrateur sont comptés en
+  base (`attemptsCount`) ; blocage de 15 minutes après 5 échecs
+  (incrément + blocage en une seule requête SQL atomique).
+- **Secrets** : aucun secret n'est renvoyé au navigateur ni journalisé
+  (les variables d'environnement ne sont jamais exposées ; `DATABASE_URL`
+  n'est jamais affichée, seulement sa présence) ; le mot de passe
+  PostgreSQL saisi dans l'assistant n'est **ni stocké, ni affiché, ni
+  écrit dans un fichier** — la connexion réelle reste portée par
+  `DATABASE_URL`.
+- **CSRF** : Server Actions Next.js (vérification d'Origin intégrée) ;
+  toutes les actions revérifient côté serveur l'état d'installation et
+  le jeton.
+- **Récupération administrateur distincte** : `/recuperation-admin`,
+  exige `ADMIN_RECOVERY_TOKEN` (absente → fonction désactivée),
+  comparaison à temps constant, 3 tentatives/heure/instance, révoque
+  toutes les sessions du compte après réinitialisation.
+- **Mode hérité** : si la base contient déjà des comptes ou profils
+  (installation antérieure à l'assistant), l'assistant n'est **jamais**
+  proposé — aucune recycled installation.
+- **Pas de mot de passe par défaut** : aucun compte de démonstration
+  n'est créé ; l'administrateur est créé par l'exploitant.
+- **Rôle administrateur** : réutilisation du système d'authentification
+  existant (`users.role = 'admin'`) — aucun second système d'auth.
+
 ## Conformité légale (à évaluer)
 
 Le produit visant des mineurs, le RGPD (UE) et les lois locales

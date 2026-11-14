@@ -36,6 +36,30 @@ Migration `20261112214817_add_game_core` : colonnes `coins`, `diamonds`,
 `question_attempts`, `child_progress`, `multiplication_mastery`,
 `child_badges`, `daily_activity`. **Non destructive.**
 
+Migration `20261113011956_add_installation` : tables `installation`
+(singleton) et `app_config` (clé/valeur). **Non destructive** (2 CREATE
+TABLE, aucune donnée existante touchée).
+
+### installation
+Verrou d'installation (une seule ligne, `id = 'installation'`).
+
+| Colonne | Type | Notes |
+|---|---|---|
+| id | TEXT | PK, valeur fixe `installation` |
+| status | TEXT | `pending` → `completed` |
+| completedAt | TIMESTAMP(3) nullable | posé à la création du premier admin → installateur verrouillé |
+| adminUserId | TEXT nullable | identifiant de l'administrateur créé |
+| appVersion | TEXT nullable | version de l'application au moment de l'installation |
+| attemptsCount | INTEGER | échecs de création d'admin (anti-abus) |
+| blockedUntil | TIMESTAMP(3) nullable | blocage temporaire après 5 échecs |
+| createdAt / updatedAt | TIMESTAMP(3) | |
+
+### app_config
+Configuration applicative (clé/valeur) écrite par l'assistant :
+`app.name`, `app.url`, `app.language`, `app.timezone`,
+`app.organization`. **Aucun secret ici** (les secrets restent dans
+l'environnement).
+
 ### users
 Compte parent (responsable légal).
 
