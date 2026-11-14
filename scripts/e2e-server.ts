@@ -24,6 +24,12 @@ const env = { ...process.env, DATABASE_URL: testUrl };
 // 1. Seed idempotent des avatars sur la base de test.
 execSync("npx tsx prisma/seed.ts", { stdio: "inherit", env });
 
+// 1b. Mode hérité : la base de test héberge des comptes de test — on
+//     marque l'installation comme terminée afin que le garde ne
+//     redirige pas vers l'assistant (le test E2E dédié
+//     tests/e2e/installation.spec.ts purge lui-même cette ligne).
+execSync("npx tsx scripts/mark-installed.ts", { stdio: "inherit", env });
+
 // 2. Build de production.
 console.log("🏗️  Build de production (next build)...");
 execSync("npx next build", { stdio: "inherit", env });
@@ -36,6 +42,17 @@ if (!existsSync(".next/standalone")) {
 cpSync(".next/static", ".next/standalone/.next/static", { recursive: true });
 if (existsSync("public")) {
   cpSync("public", ".next/standalone/public", { recursive: true });
+}
+// CLI Prisma : l'étape « migrations » de l'assistant l'exécute (comme en
+// production via docker/entrypoint.sh).
+cpSync("prisma", ".next/standalone/prisma", { recursive: true });
+cpSync("node_modules/prisma", ".next/standalone/node_modules/prisma", { recursive: true });
+cpSync("node_modules/@prisma", ".next/standalone/node_modules/@prisma", { recursive: true });
+if (existsSync("prisma.config.ts")) {
+  cpSync("prisma.config.ts", ".next/standalone/prisma.config.ts");
+}
+if (existsSync("node_modules/dotenv")) {
+  cpSync("node_modules/dotenv", ".next/standalone/node_modules/dotenv", { recursive: true });
 }
 mkdirSync(".next/standalone", { recursive: true });
 

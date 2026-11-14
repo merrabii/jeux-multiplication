@@ -1,0 +1,3 @@
+# Forcer LF pour les scripts shell (indispensables sous Linux/Alpine),
+# même quand core.autocrlf est actif sur la machine de développement.
+*.sh text eol=lf

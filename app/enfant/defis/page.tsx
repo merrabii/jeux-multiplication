@@ -7,6 +7,8 @@ export const metadata: Metadata = {
   title: "Défis — Royaume Magique des Multiplications",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ChallengePage() {
   const { child } = await requireChildContext();
 

@@ -9,6 +9,8 @@ export const metadata: Metadata = {
   title: "Entraînement — Royaume Magique des Multiplications",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function PracticePage() {
   const { child } = await requireChildContext();
 

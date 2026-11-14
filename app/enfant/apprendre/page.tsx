@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: "Apprendre — Royaume Magique des Multiplications",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function LearnPage() {
   const { child } = await requireChildContext();
   const completed = await getCompletedLessonTables(prisma, child.id);

@@ -36,6 +36,13 @@ services:
     environment:
       NODE_ENV: production
       DATABASE_URL: postgresql://${POSTGRES_USER:-jeux_user}:${POSTGRES_PASSWORD:-jeux_dev_password}@db:5432/${POSTGRES_DB:-jeux_multiplication}?schema=public
+      # Secret de signature des sessions (requis, >= 32 caractères) :
+      # définir AUTH_SECRET dans .env (jamais commité) ou l'interface Coolify.
+      AUTH_SECRET: ${AUTH_SECRET:-}
+      # Jeton d'installation : s'il est défini ici il est utilisé tel quel ;
+      # sinon le conteneur en génère un et l'imprime dans ses journaux
+      # (docker compose logs app). Laisser vide = génération automatique.
+      INSTALL_TOKEN: ${INSTALL_TOKEN:-}
     depends_on:
       db:
         condition: service_healthy

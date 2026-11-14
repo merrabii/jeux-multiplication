@@ -62,7 +62,9 @@ export const ModelName = {
   ChildProgress: 'ChildProgress',
   MultiplicationMastery: 'MultiplicationMastery',
   ChildBadge: 'ChildBadge',
-  DailyActivity: 'DailyActivity'
+  DailyActivity: 'DailyActivity',
+  AppConfig: 'AppConfig',
+  Installation: 'Installation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -255,6 +257,30 @@ export const DailyActivityScalarFieldEnum = {
 } as const
 
 export type DailyActivityScalarFieldEnum = (typeof DailyActivityScalarFieldEnum)[keyof typeof DailyActivityScalarFieldEnum]
+
+
+export const AppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
+export const InstallationScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  completedAt: 'completedAt',
+  adminUserId: 'adminUserId',
+  appVersion: 'appVersion',
+  attemptsCount: 'attemptsCount',
+  blockedUntil: 'blockedUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstallationScalarFieldEnum = (typeof InstallationScalarFieldEnum)[keyof typeof InstallationScalarFieldEnum]
 
 
 export const SortOrder = {

@@ -18,7 +18,9 @@ export default defineConfig({
   workers: 1,
   retries: 0,
   use: {
-    baseURL: "http://localhost:3100",
+    // E2E_BASE_URL permet de cibler un autre serveur (ex. conteneur
+    // Docker d'installation neuve) sans modifier la configuration.
+    baseURL: process.env.E2E_BASE_URL ?? "http://localhost:3100",
     viewport: { width: 1280, height: 800 },
     locale: "fr-FR",
   },

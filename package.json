@@ -1,6 +1,6 @@
 {
   "name": "jeux-multiplication",
-  "version": "0.1.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "description": "Royaume Magique des Multiplications - plateforme éducative interactive pour enfants",
@@ -16,6 +16,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:status": "prisma migrate status",
     "db:check": "tsx scripts/db-check.ts",
+    "db:backup": "tsx scripts/db-backup.ts",
+    "db:restore": "tsx scripts/db-restore.ts",
     "db:test:setup": "tsx scripts/db-test-setup.ts",
     "db:seed": "tsx prisma/seed.ts"
   },

@@ -20,6 +20,8 @@ export const metadata: Metadata = {
  * Tableau de bord parent — Phase 2.2 : gestion des profils enfants
  * (création, sélection, suppression logique) + suivi à venir (Étape I).
  */
+export const dynamic = "force-dynamic";
+
 export default async function ParentSpacePage() {
   const { user } = await requireParentSession();
   const children = await listChildren(prisma, user.id);

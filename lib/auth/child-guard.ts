@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/database/client";
+import { ensureInstalled } from "@/lib/auth/install-guard";
 import {
   readSessionToken,
   resolveSession,
@@ -120,6 +121,7 @@ export async function getOptionalChildContext(): Promise<ChildContext | null> {
  *   /parent (sélection/création de profil).
  */
 export async function requireChildContext(): Promise<ChildContext> {
+  await ensureInstalled();
   const token = await readSessionToken();
   const auth = await resolveSession(prisma, token);
   if (!auth) redirect("/parent/connexion");

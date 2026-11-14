@@ -152,7 +152,10 @@ describe("validation des réponses (côté serveur uniquement)", () => {
     expect(good.status).toBe("ok");
     if (good.status !== "ok") return;
     expect(good.isCorrect).toBe(true);
-    expect(good.repeatedAddition).toContain("+");
+    // Addition répétée : « a + a + … » ; pour 1×b, un seul terme (pas de +).
+    if (start.questions[1].a > 1) {
+      expect(good.repeatedAddition).toContain("+");
+    }
   });
 
   it("refuse une question d'une autre session ou d'un autre enfant", async () => {

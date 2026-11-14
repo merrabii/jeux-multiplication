@@ -3,12 +3,16 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { LoginForm } from "@/components/parent/auth/LoginForm";
 import { getOptionalParentSession } from "@/lib/auth/guards";
+import { ensureInstalled } from "@/lib/auth/install-guard";
 
 export const metadata: Metadata = {
   title: "Connexion parent — Royaume Magique des Multiplications",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ParentLoginPage() {
+  await ensureInstalled();
   const auth = await getOptionalParentSession();
   if (auth) redirect("/parent");
 

@@ -4,6 +4,7 @@ node_modules
 .env
 .env.*
 !.env.example
+.install_token
 *.log
 docs
 tests

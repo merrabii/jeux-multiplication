@@ -3,12 +3,16 @@ import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { RegisterForm } from "@/components/parent/auth/RegisterForm";
 import { getOptionalParentSession } from "@/lib/auth/guards";
+import { ensureInstalled } from "@/lib/auth/install-guard";
 
 export const metadata: Metadata = {
   title: "Inscription parent — Royaume Magique des Multiplications",
 };
 
+export const dynamic = "force-dynamic";
+
 export default async function ParentRegisterPage() {
+  await ensureInstalled();
   const auth = await getOptionalParentSession();
   if (auth) redirect("/parent");
 

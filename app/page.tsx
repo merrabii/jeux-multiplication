@@ -1,11 +1,16 @@
 import Link from "next/link";
+import { ensureInstalled } from "@/lib/auth/install-guard";
 
 /**
  * Page d'accueil — Phase 1 (fondations).
- * Page d'entrée de l'univers magique. Les espaces enfant/parent arrivent en
- * Phase 2 ; les liens pointent vers des sections en préparation.
+ * Page d'entrée de l'univers magique. Si l'application n'est pas encore
+ * installée, le visiteur est redirigé vers l'assistant /installation.
+ * Dynamique : la redirection dépend de l'état d'installation en base.
  */
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  await ensureInstalled();
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 py-16">
       {/* Étoiles magiques (décor CSS léger, sans images temporaires) */}

@@ -18,7 +18,21 @@ function createPrismaClient(): PrismaClient {
       "DATABASE_URL n'est pas défini. Vérifier .env (dev) ou les variables Coolify (production).",
     );
   }
-  const adapter = new PrismaPg({ connectionString });
+  // PGPOOL_MAX : limite du pool de connexions. Utile en serverless
+  // (Vercel/Netlify) où chaque instance ouvre son propre pool ;
+  // recommandé entre 1 et 5 sur ces plateformes. Vide = défaut du driver.
+  const poolMaxRaw = process.env.PGPOOL_MAX;
+  const poolMax =
+    poolMaxRaw && poolMaxRaw !== "" ? Number(poolMaxRaw) : undefined;
+  if (poolMaxRaw && poolMaxRaw !== "" && (!Number.isInteger(poolMax) || (poolMax as number) < 1)) {
+    throw new Error(
+      `Variable PGPOOL_MAX invalide : entier >= 1 attendu, reçu "${poolMaxRaw}".`,
+    );
+  }
+  const adapter = new PrismaPg({
+    connectionString,
+    ...(poolMax !== undefined ? { max: poolMax } : {}),
+  });
   return new PrismaClient({ adapter });
 }
 

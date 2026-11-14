@@ -408,7 +408,9 @@ export const ModelName = {
   ChildProgress: 'ChildProgress',
   MultiplicationMastery: 'MultiplicationMastery',
   ChildBadge: 'ChildBadge',
-  DailyActivity: 'DailyActivity'
+  DailyActivity: 'DailyActivity',
+  AppConfig: 'AppConfig',
+  Installation: 'Installation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -424,7 +426,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "session" | "loginAttempt" | "avatar" | "childProfile" | "gameSettings" | "learningSession" | "questionAttempt" | "childProgress" | "multiplicationMastery" | "childBadge" | "dailyActivity"
+    modelProps: "user" | "session" | "loginAttempt" | "avatar" | "childProfile" | "gameSettings" | "learningSession" | "questionAttempt" | "childProgress" | "multiplicationMastery" | "childBadge" | "dailyActivity" | "appConfig" | "installation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1316,6 +1318,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    AppConfig: {
+      payload: Prisma.$AppConfigPayload<ExtArgs>
+      fields: Prisma.AppConfigFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AppConfigFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AppConfigFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findFirst: {
+          args: Prisma.AppConfigFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AppConfigFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        findMany: {
+          args: Prisma.AppConfigFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        create: {
+          args: Prisma.AppConfigCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        createMany: {
+          args: Prisma.AppConfigCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AppConfigCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        delete: {
+          args: Prisma.AppConfigDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        update: {
+          args: Prisma.AppConfigUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        deleteMany: {
+          args: Prisma.AppConfigDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AppConfigUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AppConfigUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>[]
+        }
+        upsert: {
+          args: Prisma.AppConfigUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AppConfigPayload>
+        }
+        aggregate: {
+          args: Prisma.AppConfigAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAppConfig>
+        }
+        groupBy: {
+          args: Prisma.AppConfigGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AppConfigCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AppConfigCountAggregateOutputType> | number
+        }
+      }
+    }
+    Installation: {
+      payload: Prisma.$InstallationPayload<ExtArgs>
+      fields: Prisma.InstallationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InstallationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InstallationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        findFirst: {
+          args: Prisma.InstallationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InstallationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        findMany: {
+          args: Prisma.InstallationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>[]
+        }
+        create: {
+          args: Prisma.InstallationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        createMany: {
+          args: Prisma.InstallationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InstallationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>[]
+        }
+        delete: {
+          args: Prisma.InstallationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        update: {
+          args: Prisma.InstallationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        deleteMany: {
+          args: Prisma.InstallationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InstallationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InstallationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>[]
+        }
+        upsert: {
+          args: Prisma.InstallationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InstallationPayload>
+        }
+        aggregate: {
+          args: Prisma.InstallationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInstallation>
+        }
+        groupBy: {
+          args: Prisma.InstallationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstallationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InstallationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InstallationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1529,6 +1679,30 @@ export const DailyActivityScalarFieldEnum = {
 } as const
 
 export type DailyActivityScalarFieldEnum = (typeof DailyActivityScalarFieldEnum)[keyof typeof DailyActivityScalarFieldEnum]
+
+
+export const AppConfigScalarFieldEnum = {
+  key: 'key',
+  value: 'value',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AppConfigScalarFieldEnum = (typeof AppConfigScalarFieldEnum)[keyof typeof AppConfigScalarFieldEnum]
+
+
+export const InstallationScalarFieldEnum = {
+  id: 'id',
+  status: 'status',
+  completedAt: 'completedAt',
+  adminUserId: 'adminUserId',
+  appVersion: 'appVersion',
+  attemptsCount: 'attemptsCount',
+  blockedUntil: 'blockedUntil',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InstallationScalarFieldEnum = (typeof InstallationScalarFieldEnum)[keyof typeof InstallationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1786,6 +1960,8 @@ export type GlobalOmitConfig = {
   multiplicationMastery?: Prisma.MultiplicationMasteryOmit
   childBadge?: Prisma.ChildBadgeOmit
   dailyActivity?: Prisma.DailyActivityOmit
+  appConfig?: Prisma.AppConfigOmit
+  installation?: Prisma.InstallationOmit
 }
 
 /* Types for Logging */

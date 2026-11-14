@@ -109,3 +109,20 @@ export type ChildBadge = Prisma.ChildBadgeModel
  * Activité agrégée par jour (tableau de bord + missions quotidiennes).
  */
 export type DailyActivity = Prisma.DailyActivityModel
+/**
+ * Model AppConfig
+ * Configuration applicative clé/valeur (installateur web).
+ * Le nom de l'application, l'URL principale, la langue, le fuseau
+ * horaire et l'organisation y sont stockés après l'assistant
+ * d'installation. Jamais de secret ici (les secrets vivent dans
+ * l'environnement, jamais en base).
+ */
+export type AppConfig = Prisma.AppConfigModel
+/**
+ * Model Installation
+ * Verrou d'installation (singleton id = "installation").
+ * Statuts : pending → completed. Une fois `completedAt` posé,
+ * l'installateur web est définitivement verrouillé.
+ * `attemptsCount` / `blockedUntil` : limitation anti-abus de l'assistant.
+ */
+export type Installation = Prisma.InstallationModel

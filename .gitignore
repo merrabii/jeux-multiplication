@@ -38,6 +38,12 @@ yarn-error.log*
 .env*
 !.env.example
 
+# jeton d'installation généré au démarrage du conteneur (secret)
+.install_token
+
+# sauvegardes PostgreSQL (données de production : ne jamais commiter)
+backups/
+
 # vercel
 .vercel
 

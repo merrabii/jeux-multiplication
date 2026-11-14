@@ -1,0 +1,18 @@
+# Netlify — Royaume Magique des Multiplications
+#
+# Déploiement serverless : la base PostgreSQL doit être EXTERNE
+# (Neon, Supabase, any PostgreSQL managé). Jamais de base locale.
+# Voir docs/DEPLOYMENT.md (§ Netlify) pour la liste des variables.
+#
+# Limites connues (documentées honnêtement) :
+# - les Server Actions et les pages dynamiques s'exécutent en fonctions ;
+# - les migrations NE doivent PAS être lancées à chaque requête : elles
+#   sont appliquées en étape de build (commande ci-dessous) ;
+# - définir PGPOOL_MAX=3 (pool adapté au serverless).
+
+[build]
+  command = "npx prisma generate && npx prisma migrate deploy && npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"

@@ -30,6 +30,8 @@ export async function generateMetadata({
 
 const CRISTAL_EMOJIS = ["✨", "🌟", "💫", "🔮", "🪄", "🧿", "🎀", "🍬"];
 
+export const dynamic = "force-dynamic";
+
 export default async function LessonPage({
   params,
 }: {

@@ -18,6 +18,8 @@ export const metadata: Metadata = {
  * Tableau de bord enfant (Phase 2.2/2.2-B) : avatar, étoiles, niveau,
  * mission du jour, mondes, bouton « Continuer mon aventure ».
  */
+export const dynamic = "force-dynamic";
+
 export default async function ChildDashboardPage() {
   const { child } = await requireChildContext();
 
